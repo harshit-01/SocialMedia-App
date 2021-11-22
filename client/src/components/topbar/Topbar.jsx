@@ -3,7 +3,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import ChatIcon from '@mui/icons-material/Chat';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import {Col,Row} from "react-bootstrap"
+import {Col,Row} from "react-bootstrap";
+import React from "react";
 export default function Topbar() {
         return(
             <div className="container-fluid topbarContainer">
