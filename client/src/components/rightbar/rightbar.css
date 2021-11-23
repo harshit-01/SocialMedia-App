@@ -1,0 +1,16 @@
+.birthdayImg{
+    width:32px;
+    height:32px;
+    object-fit:cover ;
+}
+.ad{
+    width:400px;
+    height:250px;
+    object-fit:cover;
+}
+.rightbarProfileImg{
+    width:32px;
+    height:32px;
+    object-fit:cover;
+    border-radius: 50%;
+}
