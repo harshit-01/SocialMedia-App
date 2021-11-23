@@ -1,0 +1,18 @@
+.share{
+    width: 100%;
+    height: 170px;
+    border-radius:10px;
+}
+.shareProfileImg{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    object-fit: cover;
+}
+.shareInput{
+    border:none;
+    width:80%;
+}
+.shareInput:focus{
+    outline:none;
+}

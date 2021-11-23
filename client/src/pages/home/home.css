@@ -1,3 +1,10 @@
-.homeConatiner{
+.homeContainer{
     width:100%;
+}
+
+@media only screen and (min-width:768px){
+    .feedHome{
+        border-right:2px solid rgb(209, 206, 206);
+        min-height:500px
+    }
 }

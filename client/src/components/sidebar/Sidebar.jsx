@@ -7,8 +7,6 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 import "./sidebar.css";
@@ -30,7 +28,6 @@ export default function SwipeableTemporaryDrawer() {
     bottom: false,
     right: false,
   });
-  const [openBtn,setOpenBtn] = React.useState(false)
   const toggleDrawer = (anchor, open) => (event) => {
     const key = event.button;
     if(key !=undefined && (key == 0 || key == 1 )){
@@ -58,7 +55,7 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
     <span className="ms-2 my-2" style={{color:"floralwhite",fontSize:"22px"}}>Sidebar</span>
-    <span style={{float: 'right',color:"white"}} className="me-2 mt-1"><CloseIcon /></span>
+    <span style={{float: 'right',color:"white"}} className="me-2 mt-1"><CloseIcon role="button"/></span>
     <Divider />
       <List  sx={{
         width: 300,
@@ -183,8 +180,8 @@ export default function SwipeableTemporaryDrawer() {
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
             <Tooltip title="Open sidebar" arrow>
-                <Button onClick={toggleDrawer(anchor, true)} style={{color:"black",textDecoration:"none"}} variant="outlined" className="my-1 mx-1">
-                    <MenuIcon />
+                <Button onClick={toggleDrawer(anchor, true)} style={{color:"black",textDecoration:"none"}} variant="outlined" className="my-1 mx-1" size="small">
+                    <MenuIcon fontSize="inherit"/>
                 </Button>
             </Tooltip>
           <SwipeableDrawer

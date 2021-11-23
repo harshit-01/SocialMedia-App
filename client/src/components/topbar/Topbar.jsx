@@ -11,7 +11,7 @@ export default function Topbar() {
             <Row className="d-flex align-items-center">
                 <Col xs={12} md={3} className="pt-1">
                 <div className="topbarLeft">
-                    <span className="logo ms-1 fw-bold">Social Media App</span>
+                    <span className="logo ms-1 fw-bold">TieUp</span>
                 </div>
                 </Col>
                 <Col xs={12} md={5} className="pt-1">
