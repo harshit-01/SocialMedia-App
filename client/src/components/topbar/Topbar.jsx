@@ -4,8 +4,9 @@ import PersonIcon from '@mui/icons-material/Person';
 import ChatIcon from '@mui/icons-material/Chat';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import {Col,Row} from "react-bootstrap";
+import Tooltip from '@mui/material/Tooltip';
 import React from "react";
-export default function Topbar() {
+export default function Topbar({text,setText}) {
         return(
             <div className="container-fluid topbarContainer">
             <Row className="d-flex align-items-center">
@@ -31,8 +32,13 @@ export default function Topbar() {
                         <span className="topbarLink me-1" role="button" >Timeline</span>
                     </div>
                     <div className="topbarIcons d-flex">
-                        <div className="topbarIconItem me-3" role="button">
+                        <div className="topbarIconItem me-3" role="button"
+                        onClick={()=>{
+                            setText(!text);
+                        }}>
+                            <Tooltip title="Click here to check online friends down below">
                             <PersonIcon />
+                            </Tooltip>
                             <span className="topbarIconBadge">1</span>
                         </div>
                         <div className="topbarIconItem me-3" role="button">

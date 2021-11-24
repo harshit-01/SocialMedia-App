@@ -17,6 +17,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import {Users} from "./../../dummyData"
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -29,34 +30,66 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export default function PostContent(){
+function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = '#';
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.substr(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+function stringAvatar(name) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+  };
+}
+
+export default function PostContent({val}){
     const [expanded, setExpanded] = React.useState(false);
-    const avatar = "/assets/Person/1.jpeg";
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
+    const [likeCount, setLikeCount] = React.useState(val.like)
+    const [heartCount, setHeartCount] = React.useState(val.comment)
+    const [isLiked,setIsLiked] = React.useState(false);
+    const [isHeartCounted,setIsHeartCounted] = React.useState(false);
     return(
-        <Container className="mt-2 post mb-3">
+        <Container className="post mb-3">
             <Row className="postWrapper">
                 <Col>
-                   <Card>
-                   {avatar ?
+                   <Card className="mt-3">
+                   {Users.filter((u) => u.id === val.userId)[0].profilePicture ?
                         <div className="d-flex justify-content-start align-items-center">
                          <CardMedia
                          component="img"
                          height="194"
-                         image="/assets/Person/1.jpeg"
-                         src={avatar}
-                         alt={avatar}
+                         image={Users.filter((u) => u.id === val.userId)[0].profilePicture}
+                         src={Users.filter((u) => u.id === val.userId)[0].profilePicture}
+                         alt={Users.filter((u) => u.id === val.userId)[0].profilePicture}
                          style={{ width: "45px", height: "45px", objectFit: "cover",borderRadius: "50%"}}
                          className="my-2 mx-2"
                         /> 
-                        <span className="fw-bold fs-5">Yo</span>
+                        <span className="fw-bold fs-5 me-2">{Users.filter((u) => u.id === val.userId)[0].username}</span>
+                        <div className="text-muted">{val.date}</div>
                         </div>:
                         <CardHeader
                         avatar={
-                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                            R
+                        <Avatar {...stringAvatar(Users.filter((u) => u.id === val.userId)[0].username)}>
                         </Avatar>
                         }
                         action={
@@ -64,44 +97,46 @@ export default function PostContent(){
                             <MoreVertIcon />
                         </IconButton>
                         }
-                        title="Shrimp and Chorizo Paella"
-                        subheader="5 mins ago"
+                        title={Users.filter((u) => u.id === val.userId)[0].username}
+                        subheader={val.date}
                     />}
                     <CardContent>
                         <Typography variant="body2" color="text.secondary">
-                        This impressive paella is a perfect party dish and a fun meal to cook
-                        together with your guests. Add 1 cup of frozen peas along with the mussels,
-                        if you like.
+                        {val.desc}
                         </Typography>
                     </CardContent>
                     <CardMedia
                         component="img"
                         height="194"
-                        image="/assets/Post/1.jpeg"
+                        image={val.photo}
                         alt="Paella dish"
                     />
                     <CardActions disableSpacing>
-                        <IconButton aria-label="thumbs">
-                            <ThumbUpIcon />
-                            <span className="ms-2">1</span>
+                        <IconButton aria-label="thumbs" onClick={()=>{
+                                isLiked ? setLikeCount(likeCount-1):setLikeCount(likeCount+1);
+                                setIsLiked(!isLiked);
+                            }}>
+                            {isLiked?<ThumbUpIcon htmlColor="blue"/>:<ThumbUpIcon />}
+                            <span className="ms-2">{likeCount}</span>
                         </IconButton>
-                        <IconButton aria-label="add to favorites">
-                            <FavoriteIcon />
-                            <span className="ms-2">1</span>
+                        <IconButton aria-label="add to favorites" onClick={()=>{
+                                isHeartCounted? setHeartCount(heartCount-1):setHeartCount(heartCount+1);
+                                setIsHeartCounted(!isHeartCounted)
+                            }}>
+                            {isHeartCounted ? <FavoriteIcon htmlColor="red"/> : <FavoriteIcon />}
+                            <span className="ms-2">{heartCount}</span>
                         </IconButton>
-                        {/* <IconButton aria-label="share">
-                        <ShareIcon />
-                        </IconButton> */}
                         <ExpandMore
                         expand={expanded}
                         onClick={handleExpandClick}
                         aria-expanded={expanded}
                         aria-label="show more"
                         >
-                        <ExpandMoreIcon />
+                        {/* <ExpandMoreIcon /> */}
                         </ExpandMore>
                     </CardActions>
-                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+
+                    {/*<Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
                         <Typography paragraph>Method:</Typography>
                         <Typography paragraph>
@@ -109,12 +144,14 @@ export default function PostContent(){
                             aside for 10 minutes.
                         </Typography>
                         </CardContent>
-                    </Collapse>
+                    </Collapse> */}
                    </Card>
                 </Col>
             </Row>
         </Container>
     )
 }
+
+
 
 

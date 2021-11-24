@@ -1,6 +1,8 @@
 import "./feed.css";
 import Post from "./../shared/Post";
 import PostContent from "./../posts/Posts";
+import {data} from "./../../dummyData"
+
 export default function Feed(){
     return(
         <div className="feed">
@@ -8,11 +10,11 @@ export default function Feed(){
                 <Post />
             </div>
             <div className="feedWrapper">
-                <PostContent />
-                <PostContent />
-                <PostContent />
-                <PostContent />
-                <PostContent />
+                {data.map((d,index)=>{
+                    return(
+                    <PostContent key={index} val={d}/>
+                    )
+                })}
             </div>
         </div>
     )
