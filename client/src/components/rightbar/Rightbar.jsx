@@ -91,6 +91,17 @@ export default function RightBar({text,profile}){
                     <span className="rightbarInfoValue ms-2">Single</span>
                 </div>
                 </div>
+                <h4 className="rightbarTitle mt-1">Online Friends</h4>
+                        <ul className="rightbarFriendList">
+                            {text? Users.map((val)=>{
+                            return(
+                            <li className="rightbarFriend mb-1" style={{listStyleType: "numeric"}}>
+                                <div className="rightbarProfileImgConatiner ms-1">
+                                    <img className="rightbarProfileImg" src={val.profilePicture} alt=""></img>
+                                    <span className="ms-2">{val.username}</span>
+                                </div>
+                            </li>)}): "1. None"}
+                        </ul>
                 <div>
                     <span className="ps-2 me-2 pe-2" style={{backgroundColor:"goldenrod",width:"15%"}}>AD</span><span>Have a doubt, try Solutionists !</span>
                     <img src="/assets/ad1.png" alt="ad" className="ad mt-3"/>
