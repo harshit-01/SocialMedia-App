@@ -10,6 +10,7 @@ export default function Feed(){
                 <Post />
             </div>
             <div className="feedWrapper">
+                <h4 className="fw-bolder ms-4">Posts</h4>
                 {data.map((d,index)=>{
                     return(
                     <PostContent key={index} val={d}/>

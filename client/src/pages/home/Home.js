@@ -14,7 +14,8 @@ const Home = ()=>{
                     <Feed />
                 </Col>
                 <Col xs={12} md={4} className="d-flex mt-2">
-                    <Rightbar className="feedRightbar" text={text} setText={setText}/>
+                    <Rightbar className="feedRightbar" text={text} 
+                    profile="home" setText={setText}/>
                 </Col>
             </Row>
         </>

@@ -17,7 +17,8 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import {Users} from "./../../dummyData"
+import {Users} from "./../../dummyData";
+import {Form,FloatingLabel,Button} from "react-bootstrap";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -68,6 +69,7 @@ export default function PostContent({val}){
     const [heartCount, setHeartCount] = React.useState(val.comment)
     const [isLiked,setIsLiked] = React.useState(false);
     const [isHeartCounted,setIsHeartCounted] = React.useState(false);
+    const [comment,setComment] = React.useState(false);
     return(
         <Container className="post mb-3">
             <Row className="postWrapper">
@@ -132,19 +134,34 @@ export default function PostContent({val}){
                         aria-expanded={expanded}
                         aria-label="show more"
                         >
-                        {/* <ExpandMoreIcon /> */}
+                        <ExpandMoreIcon /> 
                         </ExpandMore>
                     </CardActions>
 
-                    {/*<Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                        {comment ? 
+                            <>
+                            <p className="ms-3">Comments</p>
+                            <ul>
+                                <li style={{listStyleType:"numeric"}}>Hello</li>
+                            </ul>
+                            </>
+                            :
                         <CardContent>
-                        <Typography paragraph>Method:</Typography>
-                        <Typography paragraph>
-                            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-                            aside for 10 minutes.
-                        </Typography>
+                            <Typography paragraph className="fw-bolder ms-1">Add Comment</Typography>
+                            <FloatingLabel controlId="floatingTextarea2" label="Comments">
+                                <Form.Control
+                                as="textarea"
+                                placeholder="Leave a comment here"
+                                style={{ height: '100px' }}
+                                />
+                                <Button className="mt-2 mb-2" onClick={(e)=>{
+                                    setComment(true)
+                                }}>Submit</Button>
+                            </FloatingLabel>
                         </CardContent>
-                    </Collapse> */}
+                        }       
+                    </Collapse> 
                    </Card>
                 </Col>
             </Row>
