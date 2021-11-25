@@ -1,0 +1,34 @@
+.login{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0499f2;
+    background-image: linear-gradient(315deg, #0499f2 0%, #26f596 74%);
+
+}
+.loginWrapper{
+    width: 70%;
+    height: 70%;
+    display: flex;
+}
+.loginLeft .loginRight{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+}
+.loginLogo{
+    font-size:80px;
+    font-weight:800px;
+    color:#1775ee
+}
+.loginDesc{
+    font-size: 20px;
+    color:#1775ee
+}
+.loginRight{
+    background-color:  white;
+
+}
