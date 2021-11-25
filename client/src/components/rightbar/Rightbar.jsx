@@ -147,7 +147,7 @@ export default function RightBar({text,profile}){
                             alt=""
                             className="rightbarFollowingImg"
                             />
-                            <span className="rightbarFollowingName ms-2">John Carter</span>
+                            <span className="rightbarFollowingName ms-2">Joh Carter</span>
                         </div>
                         <div className="rightbarFollowing mt-2">
                             <img
