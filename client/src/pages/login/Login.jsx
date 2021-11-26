@@ -4,6 +4,7 @@ import {Row,Col,Container,Button} from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
+import {useHistory} from "react-router-dom"
 
 const MyTextInput = ({ label, ...props }) => {
 
@@ -11,10 +12,10 @@ const MyTextInput = ({ label, ...props }) => {
     return (
       <Row>
         <Col xs={4}>
-        <label htmlFor={props.id || props.name}>{label}:</label>
+        <label htmlFor={props.id || props.name} className="fw-bold">{label}:</label>
         </Col>
         <Col xs={8}>
-        <input className="text-input mb-2 ms-2 rounded inp" {...field} {...props}/>
+        <input className="text-input mb-2 ms-2 rounded inp w-75" {...field} {...props}/>
         </Col>
         <br />
         {meta.touched && meta.error ? (
@@ -54,16 +55,19 @@ const MyTextInput = ({ label, ...props }) => {
   };
   
 
-export default function Register(){
+export default function Login(){
+    const history = useHistory()
     return(
-        <Container className="login mt-3"> 
+        <div className="login"> 
             <Row className="loginWrapper">
-                <Col className="loginLeft">
+                <Col className="loginLeft d-none d-md-block">
                     <h3 className="loginLogo">TieUp</h3>
-                    <span className="loginDesc">
+                    <span className="loginDesc ms-2 mb-2">
                         Interact with people around the world on TieUp.
                     </span>
                 </Col>
+                <h1 className="d-flex justify-content-center text-primary fw-bolder
+                d-md-none">TieUp</h1>
                 <Col className="loginRight">
                     <div className="loginBox mt-2">
                         <h3 className="text-center text-primary ">Login</h3>
@@ -105,6 +109,7 @@ export default function Register(){
                                 alert(JSON.stringify(values, null, 2));
                                 setSubmitting(false);
                             }, 400);
+                            history.push('/home')
                             }}
                         >
                             <Form>
@@ -121,18 +126,21 @@ export default function Register(){
                                 type="password"
                                 placeholder="Enter your password"
                             />
-                            <Button variant="primary" type="submit" className="my-2">
+                            <Button variant="primary" type="submit" className="my-2" >
                                 Login
                             </Button>
                             <br/>
                             <div className="my-1">Don't have an account?</div>
-                            <Button variant="success" type="submit" className="mt-2 mb-2" >Create a new account</Button>
+                            <Button variant="success" type="submit" className="mt-2 mb-2" 
+                            onClick={()=>{
+                              history.push('/signup')
+                            }}>Create a new account</Button>
                             </Form>
                         </Formik>
                     </div>
                 </Col>
             </Row>
-        </Container>
+        </div>
     )
 }
 

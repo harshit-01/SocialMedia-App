@@ -1,12 +1,16 @@
 .login{
     width: 100vw;
-    height: 90vh;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #0499f2;
     background-image: linear-gradient(315deg, #0499f2 0%, #26f596 74%);
-
+}
+@media (max-width: 768px){
+    .login{
+        height:120vh;
+    }
 }
 .loginWrapper{
     width: 70%;
@@ -30,5 +34,26 @@
 }
 .loginRight{
     background-color:  white;
-
+    border:4px solid lightgray;
+}
+input[type=text] {
+    transition: width 0.4s ease-in-out;
+  }
+  
+input[type=text]:focus {
+    width: 100%;
+}
+input[type=email] {
+    transition: width 0.4s ease-in-out;
+  }
+  
+input[type=email]:focus {
+    width: 100%;
+}
+input[type=password] {
+    transition: width 0.4s ease-in-out;
+  }
+  
+input[type=password]:focus {
+    width: 100%;
 }
