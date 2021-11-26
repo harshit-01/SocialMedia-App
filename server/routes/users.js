@@ -4,9 +4,9 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const router = express.Router();
 
-router.get('/',(req,res)=>{
-    res.send("Hey");
-})
+// router.get('/',(req,res)=>{
+//     res.send("Hey");
+// })
 
 // update user
 router.put('/:id',async(req,res)=>{
@@ -55,15 +55,17 @@ router.delete('/:id',async(req,res)=>{
     }
 })
 // get a user 
-router.get('/:id',async(req,res)=>{
-    const {id} = req.params;
-    //console.log(id)
-    
-    if(!mongoose.isValidObjectId(req.params.id)){
+router.get('/',async(req,res)=>{
+    const userId = req.query.userId;
+    const username = req.query.username;
+    console.log(userId,username)
+    if(!mongoose.isValidObjectId(userId)){
         return res.status(500).json("User not found");
     }
     try{
-    const user = await User.findById(id);
+    const user = userId
+        ? await User.findById(userId)
+        : await User.findOne({ username: username });
     const {password,updatedAt,...other} = user._doc
     res.status(200).json(other);
     }
@@ -125,4 +127,5 @@ router.put('/:id/unfollow',async(req,res)=>{
     }
     //res.status(200).json(other);
 })
+
 module.exports = router;

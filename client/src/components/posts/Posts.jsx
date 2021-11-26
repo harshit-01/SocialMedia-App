@@ -17,8 +17,12 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import {Users} from "./../../dummyData";
+// import {Users} from "./../../dummyData";
 import {Form,FloatingLabel,Button} from "react-bootstrap";
+import axios from "axios"
+import { deepOrange, deepPurple } from '@mui/material/colors';
+import moment from 'moment';
+import {Link} from "react-router-dom"
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -34,7 +38,6 @@ const ExpandMore = styled((props) => {
 function stringToColor(string) {
   let hash = 0;
   let i;
-
   /* eslint-disable no-bitwise */
   for (i = 0; i < string.length; i += 1) {
     hash = string.charCodeAt(i) + ((hash << 5) - hash);
@@ -56,7 +59,7 @@ function stringAvatar(name) {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+    children: name.split(' ')[0][0]!= "" && name.split(' ')[1][0]!=""?`${name.split(' ')[0][0]}${name.split(' ')[1][0]}`:name[0],
   };
 }
 
@@ -65,43 +68,58 @@ export default function PostContent({val}){
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-    const [likeCount, setLikeCount] = React.useState(val.like)
-    const [heartCount, setHeartCount] = React.useState(val.comment)
+    const [likeCount, setLikeCount] = React.useState(val.likes.length>0?val.likes.length:0)
+    const [heartCount, setHeartCount] = React.useState(val.heart.length>0 ? val.heart:0)
     const [isLiked,setIsLiked] = React.useState(false);
     const [isHeartCounted,setIsHeartCounted] = React.useState(false);
     const [comment,setComment] = React.useState(false);
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+    const [Users,setUsers] = React.useState({});
+    const url = "http://localhost:5000/api";
+    React.useEffect(()=>{
+        const fetchUser = async()=>{
+            const res = await axios.get(url +`/users?userId=${val.userId}`)
+            setUsers(res.data);
+            // console.log(res.data,Users.username)
+            return res;
+        }
+        fetchUser()
+    },[val.userId])
     return(
         <Container className="post mb-3">
             <Row className="postWrapper">
                 <Col>
                    <Card className="mt-3">
-                   {Users.filter((u) => u.id === val.userId)[0].profilePicture ?
+                    <Link to={`/profile/${Users.username}`} style={{textDecoration:"none",color:"black"}}>
+                    {Users.profilePicture ?
                         <div className="d-flex justify-content-start align-items-center">
                          <CardMedia
                          component="img"
                          height="194"
-                         image={Users.filter((u) => u.id === val.userId)[0].profilePicture}
-                         src={Users.filter((u) => u.id === val.userId)[0].profilePicture}
-                         alt={Users.filter((u) => u.id === val.userId)[0].profilePicture}
-                         style={{ width: "45px", height: "45px", objectFit: "cover",borderRadius: "50%"}}
+                         image={Users.profilePicture}
+                         src={Users.profilePicture}
+                         alt={Users.profilePicture}
+                         style={{ width: "45px", height: "45px", objectFit: "cover",borderRadius: "50%",fontWeight:"bold"}}
                          className="my-2 mx-2"
                         /> 
-                        <span className="fw-bold fs-5 me-2">{Users.filter((u) => u.id === val.userId)[0].username}</span>
-                        <div className="text-muted">{val.date}</div>
+                        <span className="fw-bold fs-5 me-2">{Users.username}</span>
+                        <div className="text-muted">{moment(val.createdAt.split('Z')[0]).format("DD-MM-YYYY")}</div>
                         </div>:
                         <CardHeader
                         avatar={
-                        <Avatar {...stringAvatar(Users.filter((u) => u.id === val.userId)[0].username)}>
+                        <Avatar {...stringAvatar(Users.username?Users.username : "N A")}>
                         </Avatar>
+                        //<Avatar sx={{ bgcolor: deepPurple[500] }}>{Users.username[0]}</Avatar>
                         }
                         action={
                         <IconButton aria-label="settings">
                             <MoreVertIcon />
                         </IconButton>
                         }
-                        title={Users.filter((u) => u.id === val.userId)[0].username}
-                        subheader={val.date}
+                        title={Users.username}
+                        subheader={moment(val.createdAt.split('Z')[0]).fromNow()}
                     />}
+                    </Link>
                     <CardContent>
                         <Typography variant="body2" color="text.secondary">
                         {val.desc}
@@ -110,7 +128,7 @@ export default function PostContent({val}){
                     <CardMedia
                         component="img"
                         height="194"
-                        image={val.photo}
+                        image={val.photo?val.photo:"https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?size=626&ext=jpg"}
                         alt="Paella dish"
                     />
                     <CardActions disableSpacing>
@@ -119,14 +137,14 @@ export default function PostContent({val}){
                                 setIsLiked(!isLiked);
                             }}>
                             {isLiked?<ThumbUpIcon htmlColor="blue"/>:<ThumbUpIcon />}
-                            <span className="ms-2">{likeCount}</span>
+                            <span className="ms-2">{likeCount ?likeCount :0}</span>
                         </IconButton>
                         <IconButton aria-label="add to favorites" onClick={()=>{
                                 isHeartCounted? setHeartCount(heartCount-1):setHeartCount(heartCount+1);
                                 setIsHeartCounted(!isHeartCounted)
                             }}>
                             {isHeartCounted ? <FavoriteIcon htmlColor="red"/> : <FavoriteIcon />}
-                            <span className="ms-2">{heartCount}</span>
+                            <span className="ms-2">{heartCount?heartCount:0}</span>
                         </IconButton>
                         <ExpandMore
                         expand={expanded}

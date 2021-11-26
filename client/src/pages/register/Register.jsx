@@ -56,7 +56,7 @@ const MyTextInput = ({ label, ...props }) => {
 
 export default function Register(){
     return(
-        <Container className="login"> 
+        <Container className="login mt-3"> 
             <Row className="loginWrapper">
                 <Col className="loginLeft">
                     <h3 className="loginLogo">TieUp</h3>

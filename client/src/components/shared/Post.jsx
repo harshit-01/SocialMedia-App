@@ -16,7 +16,7 @@ export default function Post(){
                 <Col className="shareTop">
                     <Card border="info shadow">
                         <Card.Header className="d-flex">
-                            <img src="/assets/Person/1.jpeg" alt="person" className="shareProfileImg me-2 mb-2" />
+                            <img src="https://i.pinimg.com/564x/5b/6c/ee/5b6cee1b913d46e4cbc8e2a45b651889.jpg" alt="person" className="shareProfileImg me-2 mb-2" />
                             <input className="shareInput me-1" placeholder="What's in your mind?"></input>
                             <Sidebar/>
                         </Card.Header>

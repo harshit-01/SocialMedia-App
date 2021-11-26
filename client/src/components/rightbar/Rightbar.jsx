@@ -6,10 +6,12 @@ import CakeIcon from '@mui/icons-material/Cake';
 import Example from "./../shared/Modal";
 import {useState} from "react"
 import Confetti from 'react-confetti'
+import Avatar from '@mui/material/Avatar';
+import { deepOrange, deepPurple } from '@mui/material/colors';
 
 
 
-export default function RightBar({text,profile}){
+export default function RightBar({text,profile,Users}){
     const { width, height } = useWindowSize();
     const [show, setShow] = useState(false);
     const [conf,setConf] = useState(false);
@@ -22,6 +24,7 @@ export default function RightBar({text,profile}){
         setShow(true);
         setConf(true);
     }
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const HomeRightBar = ()=>{
         return(
             <>
@@ -39,14 +42,19 @@ export default function RightBar({text,profile}){
                     </div>
                         <h4 className="rightbarTitle mt-1">Online Friends</h4>
                         <ul className="rightbarFriendList">
-                            {text? Users.map((val)=>{
+                            {text? Users.followers.length>0 ? Users.followers.map((val,i)=>{
                             return(
                             <li className="rightbarFriend mb-1" style={{listStyleType: "numeric"}}>
                                 <div className="rightbarProfileImgConatiner ms-1">
-                                    <img className="rightbarProfileImg" src={val.profilePicture} alt=""></img>
+                                    {PF+ val.profilePicture?
+                                    <img className="rightbarProfileImg" src={PF+ val.profilePicture} alt=""></img>:
+                                    i%2 ==0 ?
+                                    <Avatar sx={{ bgcolor: deepOrange[500] }}>{val.username[0]}</Avatar>:
+                                    <Avatar sx={{ bgcolor: deepPurple[500] }}>{val.username[0]}</Avatar>
+                                    }
                                     <span className="ms-2">{val.username}</span>
                                 </div>
-                            </li>)}): "1. None"}
+                            </li>)}):"1. None": ""}
                         </ul>
                         <div className="mb-2">
                             <CakeIcon htmlColor="pink" size="large" onClick={handleShow}role="button"/>
@@ -80,27 +88,27 @@ export default function RightBar({text,profile}){
                 <div className="rightbarInfo">
                 <div className="rightbarInfoItem">
                     <span className="rightbarInfoKey">City:</span>
-                    <span className="rightbarInfoValue ms-2">New York</span>
+                    <span className="rightbarInfoValue ms-2">{Users.city ? Users.city:"NA"}</span>
                 </div>
                 <div className="rightbarInfoItem">
                     <span className="rightbarInfoKey">From:</span>
-                    <span className="rightbarInfoValue ms-2">Madrid</span>
+                    <span className="rightbarInfoValue ms-2">{Users.from ? Users.from:"NA"}</span>
                 </div>
                 <div className="rightbarInfoItem">
                     <span className="rightbarInfoKey">Relationship:</span>
-                    <span className="rightbarInfoValue ms-2">Single</span>
+                    <span className="rightbarInfoValue ms-2">{Users.relationship ? Users.relationship === 1? "Single":Users.relationship === 2?"Married":"Divorced":"NA"}</span>
                 </div>
                 </div>
                 <h4 className="rightbarTitle mt-1">Online Friends</h4>
                         <ul className="rightbarFriendList">
-                            {text? Users.map((val)=>{
+                            {text? Users.followers.length>0 ? Users.followers.map((val)=>{
                             return(
                             <li className="rightbarFriend mb-1" style={{listStyleType: "numeric"}}>
                                 <div className="rightbarProfileImgConatiner ms-1">
-                                    <img className="rightbarProfileImg" src={val.profilePicture} alt=""></img>
+                                    <img className="rightbarProfileImg" src={PF+val.profilePicture} alt=""></img>
                                     <span className="ms-2">{val.username}</span>
                                 </div>
-                            </li>)}): "1. None"}
+                            </li>)}):"1. None": ""}
                         </ul>
                 <div>
                     <span className="ps-2 me-2 pe-2" style={{backgroundColor:"goldenrod",width:"15%"}}>AD</span><span>Have a doubt, try Solutionists !</span>
@@ -122,7 +130,7 @@ export default function RightBar({text,profile}){
                     <div className="rightbarFollowings d-flex flex-wrap">
                         <div className="rightbarFollowing mt-2 me-2">
                             <img
-                            src="assets/person/1.jpeg"
+                            src={PF+"person/1.jpeg"}
                             alt=""
                             className="rightbarFollowingImg"
                             />
@@ -130,7 +138,7 @@ export default function RightBar({text,profile}){
                         </div>
                         <div className="rightbarFollowing mt-2">
                             <img
-                            src="assets/person/2.jpeg"
+                            src={PF+"person/2.jpeg"}
                             alt=""
                             className="rightbarFollowingImg"
                             />
@@ -138,7 +146,7 @@ export default function RightBar({text,profile}){
                         </div>
                         <div className="rightbarFollowing mt-2 me-2">
                             <img
-                            src="assets/person/3.jpeg"
+                            src={PF+"person/3.jpeg"}
                             alt=""
                             className="rightbarFollowingImg"
                             />
@@ -146,7 +154,7 @@ export default function RightBar({text,profile}){
                         </div>
                         <div className="rightbarFollowing mt-2">
                             <img
-                            src="assets/person/4.jpeg"
+                            src={PF+"person/4.jpeg"}
                             alt=""
                             className="rightbarFollowingImg"
                             />
@@ -154,7 +162,7 @@ export default function RightBar({text,profile}){
                         </div>
                         <div className="rightbarFollowing mt-2 me-2">
                             <img
-                            src="assets/person/5.jpeg"
+                            src={PF+"person/5.jpeg"}
                             alt=""
                             className="rightbarFollowingImg"
                             />
@@ -162,7 +170,7 @@ export default function RightBar({text,profile}){
                         </div>
                         <div className="rightbarFollowing mt-2">
                             <img
-                            src="assets/person/6.jpeg"
+                            src={PF+"person/6.jpeg"}
                             alt=""
                             className="rightbarFollowingImg"
                             />

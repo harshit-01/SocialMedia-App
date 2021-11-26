@@ -6,13 +6,31 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import {Col,Row} from "react-bootstrap";
 import Tooltip from '@mui/material/Tooltip';
 import React from "react";
-export default function Topbar({text,setText}) {
+import {Link} from "react-router-dom"
+
+export default function Topbar({text,setText,location,Users}) {
+        // const [dataPost,setDataPost] = useState([]);
+        // const url = "http://localhost:5000/api";
+        // React.useEffect(()=>{
+        //     const fetchPosts = async()=>{
+        //         const res = await axios.get(url +'/posts/timeline/619fdc5067929e38b047921e')
+        //         setDataPost(res.data);
+        //         return res;
+        //     }
+        //     fetchPosts()
+        // },[])
+        // {dataPost.map((val)=>{
+        //     return(
+            
+        // )})}
         return(
             <div className="container-fluid topbarContainer">
             <Row className="d-flex align-items-center">
                 <Col xs={12} md={3} className="pt-1">
                 <div className="topbarLeft">
-                    <span className="logo ms-1 fw-bold">TieUp</span>
+                    <span className="logo ms-1 fw-bold"><Link to="/" style={{
+                            color:"white",textDecoration:"none"
+                        }}>TieUp</Link></span>
                 </div>
                 </Col>
                 <Col xs={12} md={5} className="pt-1">
@@ -28,7 +46,9 @@ export default function Topbar({text,setText}) {
                 <Col xs={12} md={4} className="pt-1">
                 <div className="topbarRight d-flex justify-content-around align-items-center">
                     <div className="topbarLinks">
-                        <span className="topbarLink me-2" role="button" >Home</span>
+                        <span className="topbarLink me-2" role="button" ><Link to="/" style={{
+                            color:"white",textDecoration:"none"
+                        }}>Home</Link></span>
                         <span className="topbarLink me-1" role="button" >Timeline</span>
                     </div>
                     <div className="topbarIcons d-flex">
@@ -50,7 +70,10 @@ export default function Topbar({text,setText}) {
                             <span className="topbarIconBadge">1</span>
                         </div>
                     </div>
-                    <img src="/assets/Person/7.jpeg" alt="" className="topbarImg img-fluid mb-1" role="button"></img>
+                    <Link to={`/profile/${Users.username}`} style={{
+                            color:"white",textDecoration:"none"
+                     }}>
+                    <img src="/assets/Person/7.jpeg" alt="" className="topbarImg img-fluid mb-1" role="button"></img></Link>
                 </div>
                 </Col>
             </Row>

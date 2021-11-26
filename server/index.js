@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const userRoute = require('./routes/users');
 const authRoute = require('./routes/auth');
 const postRoute = require('./routes/posts');
+var cors = require('cors')
 const app = express();
 
 dotenv.config();
@@ -24,7 +25,9 @@ catch(err){
 
 
 // middleware 
+
 app.use(express.json()) // bodyParser
+app.use(cors())
 app.use((helmet()));
 app.use(morgan("common"));
 // app.get("/",(req,res)=>{
