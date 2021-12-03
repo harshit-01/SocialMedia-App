@@ -39,6 +39,22 @@ router.put('/:id',async(req,res)=>{
         return res.status(403).json("You can only update your account");
     }
 })
+router.put('/:id/info',async(req,res)=>{
+    // console.log(req.body)
+    if(req.body.userId == (req.params.id || req.body.isAdmin) ){
+         try{
+            const user = await User.findByIdAndUpdate(req.params.id,{ $set:req.body });
+            // console.log(user)
+            res.status(200).json(user)
+        }
+        catch(err){
+            res.status(500).json(err)
+        }
+    }
+    else{
+        return res.status(403).json("You can only update your account");
+    }
+})
 // delete a user
 router.delete('/:id',async(req,res)=>{
     const {id} = req.params;
@@ -59,8 +75,8 @@ router.get('/',async(req,res)=>{
     const userId = req.query.userId;
     const username = req.query.username;
     console.log(userId,username)
-    if(!mongoose.isValidObjectId(userId)){
-        return res.status(500).json("User not found");
+    if(userId && !mongoose.isValidObjectId(userId)){
+        return res.status(404).json("User not found");
     }
     try{
     const user = userId
@@ -73,21 +89,40 @@ router.get('/',async(req,res)=>{
         res.status(500).json(err);
     }
 })
+// get all friends 
+router.get('/:userId/friends',async (req,res)=>{
+    try{
+        const currentUser = await User.findById(req.params.userId);
+        console.log(currentUser)
+        const friends = await Promise.all(
+            currentUser.followings.map((friendId) => {
+              return User.findById(friendId);
+            })
+        )
+
+        let friendList = [];
+          friends.map((friend) => {
+            const { _id, username, profilePicture } = friend;
+            friendList.push({ _id, username, profilePicture });
+        });
+        res.status(200).json(friendList)
+    }
+    catch(err){
+        // console.log(err)
+        res.status(500).json(err);
+    }
+})
 // follow a user
 router.put('/:id/follow',async(req,res)=>{
     const {id} = req.params;
-    //console.log(id)
-    if(req.body.userId === id){
-        return res.status(403).json("User cant be followed");
-    }
-    else{
+    console.log(id,req.body.userId)
     try{
     const user = await User.findById(id);
-    const currentUser = await User.findById(req.body.userId)
+    const currentUser = await User.findOne({username:req.body.username})
     console.log(id,req.body.userId)
     if(!user.followers.includes(req.body.userId)){
-        await user.updateOne({$push:{followers:req.body.userId}}) 
-        await currentUser.updateOne({$push:{followings:req.body.userId}})
+        await user.updateOne({$push:{followers:currentUser._id}}) 
+        await currentUser.updateOne({$push:{followings:id}})
         return res.status(200).json("Followed");
     }
     else{
@@ -97,24 +132,19 @@ router.put('/:id/follow',async(req,res)=>{
     catch(err){
         res.status(500).json(err)
     }
-    }
     //res.status(200).json(other);
 })
 // unfollow a user
 router.put('/:id/unfollow',async(req,res)=>{
     const {id} = req.params;
-    //console.log(id)
-    if(req.body.userId === id){
-        return res.status(403).json("You cant follow/unfollow yourself");
-    }
-    else{
+    console.log(id,req.body.username)
     try{
     const user = await User.findById(id);
-    const currentUser = await User.findById(req.body.userId)
-    console.log(id,req.body.userId)
-    if(user.followers.includes(req.body.userId)){
-        await user.updateOne({$pull:{followers:req.body.userId}}) 
-        await currentUser.updateOne({$pull:{followings:req.body.userId}})
+    const currentUser = await User.findOne({username:req.body.username})
+    console.log(id,currentUser)
+    if(user.followers.includes(currentUser._id)){
+        await user.updateOne({$pull:{followers:currentUser._id}}) 
+        await currentUser.updateOne({$pull:{followings:id}})
         return res.status(200).json("Unfollowed");
     }
     else{
@@ -124,8 +154,23 @@ router.put('/:id/unfollow',async(req,res)=>{
     catch(err){
         res.status(500).json(err)
     }
-    }
     //res.status(200).json(other);
+})
+
+router.put('/:id/events',async(req,res)=>{
+    const {id} = req.params;
+    console.log(req.body)
+    if(!mongoose.isValidObjectId(id)){
+        return res.status(404).json("User not found");
+    }
+    try{
+        const user = await User.findByIdAndUpdate(id,{$push:{title:req.body.title,start:req.body.start,end:req.body.end}});
+        return res.status(200).json(user)
+    }
+    catch(err) {
+        console.log(err);
+        res.status(500).json(err)
+    }
 })
 
 module.exports = router;

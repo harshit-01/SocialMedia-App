@@ -6,6 +6,10 @@ const postSchema = new Schema({
         type:String,
         required:true
     },
+    username:{
+        type:String,
+        required:true
+    },
     desc:{
         type:String,
         max:500
@@ -18,6 +22,10 @@ const postSchema = new Schema({
         default:[]
     },
     heart:{
+        type:Array,
+        default:[]
+    },
+    comments:{
         type:Array,
         default:[]
     }

@@ -16,3 +16,8 @@
 .shareInput:focus{
     outline:none;
 }
+.image{
+    min-height:194px;
+    max-height: 500px;
+    object-fit:cover;
+}

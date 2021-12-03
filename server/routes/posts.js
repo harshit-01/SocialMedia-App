@@ -34,9 +34,9 @@ router.get('/:id',async(req,res) => {
 })
 
 // get timeline Post  (all post of this user)
-router.get("/timeline/:userId", async (req, res) => {
+router.get("/timeline/:username", async (req, res) => {
     try {
-      const currentUser = await User.findById(req.params.userId);
+      const currentUser = await User.findOne({username: req.params.username});
       const userPosts = await Post.find({ userId: currentUser._id });
       const friendPosts = await Promise.all(
         currentUser.followings.map((friendId) => {
@@ -50,18 +50,19 @@ router.get("/timeline/:userId", async (req, res) => {
   });
 
 // delete Post
-router.delete('/:id',async(req,res)=>{
+router.delete('/:id/:userId',async(req,res)=>{
     try{
-    const {id} = req.params;
-    const post = await Post.findById(id);
-    if(req.body.userId === post.userId){
-        //const updatedPost  = await Post.findByIdAndUpdate(id,{$set:req.body});
-        await Post.findByIdAndDelete(id);
-        res.status(200).json("Post has been successfully deleted")
-    }
-    else{
-        res.status(403).json("User doesn't exist");
-    }
+        const {id,userId} = req.params;
+        const post = await Post.findById(id);
+        console.log(id,post,req.params);
+        if(userId === post.userId){
+            //const updatedPost  = await Post.findByIdAndUpdate(id,{$set:req.body});
+            await post.deleteOne();
+            res.status(200).json("Post has been deleted successfully")
+        }
+        else{
+            res.status(403).json("Post/User doesn't exist");
+        }
     }
     catch(err){
         res.status(500).json(err)
@@ -75,7 +76,7 @@ router.put('/:id',async(req,res)=>{
     const post = await Post.findById(id);
     if(req.body.userId === post.userId){
         //const updatedPost  = await Post.findByIdAndUpdate(id,{$set:req.body});
-        await Post.updateOne({$set:req.body});
+        await post.updateOne({$set:req.body});
         // console.log(req.body)
         res.status(200).json("Post has been updated")
     }
@@ -97,12 +98,13 @@ router.patch('/:id/like',async (req,res) => {
             return res.status(404).json("Post not found");
         }
         else{
+            // console.log(post.likes.includes(req.body.userId),req.body.userId,post)
             if(!post.likes.includes(req.body.userId)){
-            await Post.updateOne({$push:{likes:req.body.userId}});
+            await post.updateOne({$push:{likes:req.body.userId}});
             res.status(200).json("You have liked the post")
             }
             else{
-            await Post.updateOne({$pull:{likes:req.body.userId}});
+            await post.updateOne({$pull:{likes:req.body.userId}});
             res.status(200).json("You have disliked the post")
             }
         }
@@ -120,11 +122,11 @@ router.patch('/:id/heart',async (req,res) => {
         }
         else{
             if(!post.likes.includes(req.body.userId)){
-            await Post.updateOne({$push:{heart:req.body.userId}});
+            await post.updateOne({$push:{heart:req.body.userId}});
             res.status(200).json("You have liked the post")
             }
             else{
-            await Post.updateOne({$pull:{heart:req.body.userId}});
+            await post.updateOne({$pull:{heart:req.body.userId}});
             res.status(200).json("You have disliked the post")
             }
         }
@@ -145,4 +147,23 @@ router.get("/profile/:username", async (req, res) => {
       res.status(500).json(err);
     }
   });
+router.patch('/:id/comment',async(req,res)=>{
+    const {id} = req.params;
+    console.log(req.body)
+    try{
+        if(!mongoose.isValidObjectId(req.body.userId)){
+            return res.status(404).json("User not found");
+        }
+        else{
+            const post = await Post.findById(id)
+            const updPost = await post.updateOne({$push:{comments:req.body.comments}})
+            console.log(post)
+            // const updUser = await user.updateOne({comments:req.body.comment});
+            res.status(200).json(updPost);
+        }
+    }
+    catch(err) {
+        res.status(500).json(err);
+    }
+})
 module.exports = router;

@@ -6,6 +6,7 @@ const router = express.Router();
 // Register/Create user
 router.post('/register',async(req,res)=>{
     const {username,email,password} = req.body;
+    console.log(req.body);
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password,salt);
@@ -21,7 +22,7 @@ router.post('/register',async(req,res)=>{
 
 // Login User
 router.post('/login',async(req,res)=>{
-    const {username,email,password} = req.body;
+    const {email,password} = req.body;
     try {
         const oldUser = await User.findOne({email});
         if(!oldUser){

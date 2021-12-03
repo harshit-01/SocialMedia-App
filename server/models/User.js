@@ -55,7 +55,16 @@ const userSchema = new Schema({
   relationship:{
     type:Number,
     enum:[1,2,3]
-  }
+  },
+  title:{
+    type : [String]
+  }, 
+  start:{
+    type : [String]
+  }, 
+  end:{
+    type : [String]
+  }, 
 
 },{timestamps: true});
 

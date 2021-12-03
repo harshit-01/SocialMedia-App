@@ -1,13 +1,18 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import "./login.css";
-import {Row,Col,Container,Button} from 'react-bootstrap';
-import ReactDOM from 'react-dom';
+import {Row,Col,Button} from 'react-bootstrap';
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
 import {useHistory} from "react-router-dom"
+import {loginCall} from "./../../apiCall"
+import {AuthContext} from "./../../context/AuthContext"
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
+
 
 const MyTextInput = ({ label, ...props }) => {
-
+    
     const [field, meta] = useField(props);
     return (
       <Row>
@@ -15,7 +20,7 @@ const MyTextInput = ({ label, ...props }) => {
         <label htmlFor={props.id || props.name} className="fw-bold">{label}:</label>
         </Col>
         <Col xs={8}>
-        <input className="text-input mb-2 ms-2 rounded inp w-75" {...field} {...props}/>
+        <input className="text-input mb-3 ms-2 rounded inp w-75" {...field} {...props}/>
         </Col>
         <br />
         {meta.touched && meta.error ? (
@@ -55,8 +60,10 @@ const MyTextInput = ({ label, ...props }) => {
   };
   
 
-export default function Login(){
-    const history = useHistory()
+export default function Login({setIsLoggedIn}){
+    const history = useHistory();
+    const {user,isFetching,error,dispatch} = useContext(AuthContext);
+
     return(
         <div className="login"> 
             <Row className="loginWrapper">
@@ -70,68 +77,63 @@ export default function Login(){
                 d-md-none">TieUp</h1>
                 <Col className="loginRight">
                     <div className="loginBox mt-2">
-                        <h3 className="text-center text-primary ">Login</h3>
+                        <h3 className="text-center text-primary mb-4">Login</h3>
                         <Formik
                             initialValues={{
-                            userName: '',
+                            username:'',
                             email: '',
-                            acceptedTerms: false, // added for our checkbox
-                            jobType: '', // added for our select
                             password:'',
-                            confirmPassword:'',
                             }}
                             validationSchema={Yup.object({
-                            userName: Yup.string()
-                                .max(15, 'Must be 15 characters or less')
-                                .required('Required'),
+                            username:Yup.string().required('Required'),
                             email: Yup.string()
                                 .email('Invalid email address')
                                 .required('Required'),
-                            acceptedTerms: Yup.boolean()
-                                .required('Required')
-                                .oneOf([true], 'You must accept the terms and conditions.'),
                             password: Yup.string()
-                                    .required('No password provided.') 
-                                    .min(8, 'Password is too short - should be 8 chars minimum.')
-                                    .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
-                            confirmPassword: Yup.string()
-                                .oneOf([Yup.ref('password'), null], 'Passwords must match'),
-                            jobType: Yup.string()
-                                .oneOf(
-                                ['designer', 'development', 'product', 'other'],
-                                'Invalid Job Type'
-                                )
-                                .required('Required'),
-                            
+                                .required('No password provided.') 
+                                .min(8, 'Password is too short - should be 8 chars minimum.')
+                                .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.')
                             })}
                             onSubmit={(values, { setSubmitting }) => {
-                            setTimeout(() => {
-                                alert(JSON.stringify(values, null, 2));
-                                setSubmitting(false);
-                            }, 400);
-                            history.push('/home')
+                            if(values){
+                                sessionStorage.setItem('user', values.username);
+                                setIsLoggedIn(true)
+                            }
+                            loginCall(values,dispatch)
+                            history.push('/')
                             }}
                         >
                             <Form>
                             <MyTextInput
-                                label="Email Address"
+                                label="Username"
+                                name="username"
+                                type="username"
+                                placeholder="Harshit Kashyap"
+                            />
+                            <MyTextInput
+                                label="Email"
                                 name="email"
                                 type="email"
                                 placeholder="jane@formik.com"
                             />
-                            
+            
                             <MyTextInput
                                 label="Password"
                                 name="password"
                                 type="password"
                                 placeholder="Enter your password"
                             />
+                            
+                            {isFetching? <button class="btn btn-primary" type="submit" disabled>
+                              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                              Loading...
+                            </button>:
                             <Button variant="primary" type="submit" className="my-2" >
-                                Login
-                            </Button>
+                              Login
+                            </Button>}
                             <br/>
                             <div className="my-1">Don't have an account?</div>
-                            <Button variant="success" type="submit" className="mt-2 mb-2" 
+                            <Button variant="success" type="button" className="mt-2 mb-2" 
                             onClick={()=>{
                               history.push('/signup')
                             }}>Create a new account</Button>

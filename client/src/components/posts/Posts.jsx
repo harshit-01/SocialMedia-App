@@ -23,6 +23,8 @@ import axios from "axios"
 import { deepOrange, deepPurple } from '@mui/material/colors';
 import moment from 'moment';
 import {Link} from "react-router-dom"
+import {AuthContext} from "./../../context/AuthContext"
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -59,11 +61,11 @@ function stringAvatar(name) {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: name.split(' ')[0][0]!= "" && name.split(' ')[1][0]!=""?`${name.split(' ')[0][0]}${name.split(' ')[1][0]}`:name[0],
+    children:name.indexOf(' ') >= 0?`${name.split(' ')[0][0]}${name.split(' ')[1][0]}`:name[0],
   };
 }
 
-export default function PostContent({val}){
+export default function PostContent({val,onDelete}){
     const [expanded, setExpanded] = React.useState(false);
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -73,24 +75,29 @@ export default function PostContent({val}){
     const [isLiked,setIsLiked] = React.useState(false);
     const [isHeartCounted,setIsHeartCounted] = React.useState(false);
     const [comment,setComment] = React.useState(false);
+    const {user} = React.useContext(AuthContext)
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [Users,setUsers] = React.useState({});
     const url = "http://localhost:5000/api";
+    const uname = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
     React.useEffect(()=>{
         const fetchUser = async()=>{
-            const res = await axios.get(url +`/users?userId=${val.userId}`)
+            const res = uname? await axios.get(url +`/users?username=${uname}`):await axios.get(url +`/users?userId=${val.userId}`)
+            
             setUsers(res.data);
             // console.log(res.data,Users.username)
             return res;
         }
         fetchUser()
-    },[val.userId])
+    },[val.userId,uname])
+    const [reaction,setReaction] = React.useState(null);
+    const commentRef = React.useRef(null);
     return(
         <Container className="post mb-3">
             <Row className="postWrapper">
                 <Col>
-                   <Card className="mt-3">
-                    <Link to={`/profile/${Users.username}`} style={{textDecoration:"none",color:"black"}}>
+                   <Card className="mt-3" style={{maxWidth:"45rem"}}>
+                    <Link to={`/profile/${val.username}`} style={{textDecoration:"none",color:"black"}}>
                     {Users.profilePicture ?
                         <div className="d-flex justify-content-start align-items-center">
                          <CardMedia
@@ -102,12 +109,12 @@ export default function PostContent({val}){
                          style={{ width: "45px", height: "45px", objectFit: "cover",borderRadius: "50%",fontWeight:"bold"}}
                          className="my-2 mx-2"
                         /> 
-                        <span className="fw-bold fs-5 me-2">{Users.username}</span>
-                        <div className="text-muted">{moment(val.createdAt.split('Z')[0]).format("DD-MM-YYYY")}</div>
+                        <span className="fw-bold fs-5 me-2">{val.username}</span>
+                        <div className="text-muted">{moment(val.createdAt.split('Z')[0]).fromNow()}</div>
                         </div>:
                         <CardHeader
                         avatar={
-                        <Avatar {...stringAvatar(Users.username?Users.username : "N A")}>
+                        <Avatar {...stringAvatar(val.username?val.username.toUpperCase() : "N A")}>
                         </Avatar>
                         //<Avatar sx={{ bgcolor: deepPurple[500] }}>{Users.username[0]}</Avatar>
                         }
@@ -116,7 +123,7 @@ export default function PostContent({val}){
                             <MoreVertIcon />
                         </IconButton>
                         }
-                        title={Users.username}
+                        title={val.username}
                         subheader={moment(val.createdAt.split('Z')[0]).fromNow()}
                     />}
                     </Link>
@@ -125,14 +132,28 @@ export default function PostContent({val}){
                         {val.desc}
                         </Typography>
                     </CardContent>
+                    {val.img?
                     <CardMedia
                         component="img"
-                        height="194"
-                        image={val.photo?val.photo:"https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?size=626&ext=jpg"}
+                        className="w-100 image"
+                        // min-height="194"
+                        image={"http://localhost:5000/images/"+val.img}
                         alt="Paella dish"
-                    />
+                    />:  
+                    <CardMedia
+                    component="img"
+                    height="194"
+                    image={"https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?size=626&ext=jpg"}
+                    alt="Paella dish"
+                    />}
                     <CardActions disableSpacing>
                         <IconButton aria-label="thumbs" onClick={()=>{
+                                 try{
+                                    axios.patch(url+`/posts/${val._id}/like`,{userId:user._id})
+                                }
+                                catch(err){
+
+                                }
                                 isLiked ? setLikeCount(likeCount-1):setLikeCount(likeCount+1);
                                 setIsLiked(!isLiked);
                             }}>
@@ -140,11 +161,22 @@ export default function PostContent({val}){
                             <span className="ms-2">{likeCount ?likeCount :0}</span>
                         </IconButton>
                         <IconButton aria-label="add to favorites" onClick={()=>{
+                                try{
+                                    axios.patch(url+`/posts/${val._id}/heart`,{userId:user._id})
+                                }
+                                catch(err){
+                                    console.log(err)
+                                }
                                 isHeartCounted? setHeartCount(heartCount-1):setHeartCount(heartCount+1);
                                 setIsHeartCounted(!isHeartCounted)
                             }}>
                             {isHeartCounted ? <FavoriteIcon htmlColor="red"/> : <FavoriteIcon />}
                             <span className="ms-2">{heartCount?heartCount:0}</span>
+                        </IconButton>
+                        <IconButton aria-label="add to favorites" onClick={()=>{
+                            onDelete(val._id,Users._id);
+                        }}>
+                           <DeleteIcon />
                         </IconButton>
                         <ExpandMore
                         expand={expanded}
@@ -161,7 +193,8 @@ export default function PostContent({val}){
                             <>
                             <p className="ms-3">Comments</p>
                             <ul>
-                                <li style={{listStyleType:"numeric"}}>Hello</li>
+
+                                <li style={{listStyleType:"numeric"}}>{val.comments?val.comments:""}</li>
                             </ul>
                             </>
                             :
@@ -172,9 +205,17 @@ export default function PostContent({val}){
                                 as="textarea"
                                 placeholder="Leave a comment here"
                                 style={{ height: '100px' }}
+                                ref={commentRef}
                                 />
-                                <Button className="mt-2 mb-2" onClick={(e)=>{
+                                <Button className="mt-2 mb-2" onClick={async(e)=>{
                                     setComment(true)
+                                    try{
+                                        await axios.patch(url+`/posts/${val._id}/comment`,{userId:Users._id,comments:commentRef.current.value})
+                                        window.location.reload()
+                                    }
+                                    catch(err){
+                                        console.log(err)
+                                    }
                                 }}>Submit</Button>
                             </FloatingLabel>
                         </CardContent>

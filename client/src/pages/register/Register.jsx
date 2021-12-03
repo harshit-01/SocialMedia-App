@@ -5,16 +5,17 @@ import ReactDOM from 'react-dom';
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
 import {useHistory} from "react-router-dom"
+import axios from "axios";
 
 const MyTextInput = ({ label, ...props }) => {
     const [field, meta] = useField(props);
     return (
       <Row>
-        <Col xs={3}>
+        <Col xs={4}>
         <label htmlFor={props.id || props.name} className="fw-bold">{label}:</label>
         </Col>
-        <Col xs={9}>
-        <input className="text-input mb-2 ms-4 rounded inp w-75" {...field} {...props} />
+        <Col xs={8}>
+        <input className="text-input mb-3 ms-4 rounded inp w-75" {...field} {...props} />
         </Col>
         <br />
         {meta.touched && meta.error ? (
@@ -56,6 +57,7 @@ const MyTextInput = ({ label, ...props }) => {
 
 export default function Register(){
     const history = useHistory()
+    const url = "http://localhost:5000/api"
     return(
         <div className="login"> 
             <Row className="loginWrapper">
@@ -72,15 +74,14 @@ export default function Register(){
                         <h3 className="text-center text-primary">Signup</h3>
                         <Formik
                             initialValues={{
-                            userName: '',
+                            username: '',
                             email: '',
                             acceptedTerms: false, // added for our checkbox
-                            jobType: '', // added for our select
                             password:'',
                             confirmPassword:'',
                             }}
                             validationSchema={Yup.object({
-                            userName: Yup.string()
+                            username: Yup.string()
                                 .max(15, 'Must be 15 characters or less')
                                 .required('Required'),
                             email: Yup.string()
@@ -95,32 +96,32 @@ export default function Register(){
                                     .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
                             confirmPassword: Yup.string()
                                 .oneOf([Yup.ref('password'), null], 'Passwords must match'),
-                            jobType: Yup.string()
-                                .oneOf(
-                                ['designer', 'development', 'product', 'other'],
-                                'Invalid Job Type'
-                                )
-                                .required('Required'),
-                            
                             })}
                             onSubmit={(values, { setSubmitting }) => {
-                            setTimeout(() => {
-                                alert(JSON.stringify(values, null, 2));
-                                setSubmitting(false);
-                            }, 400);
-                            history.push('/home')
+                            const user = {
+                              username:values.username,
+                              email:values.email,
+                              password:values.password
+                            }
+                            try{
+                            axios.post(`${url}/auth/register`,user);
+                            history.push('/login')
+                            }
+                            catch(err){
+                              console.log(err);
+                            }
                             }}
                         >
                             <Form>
                             <MyTextInput
-                                label="Username"
-                                name="userName"
+                                label="Fullname (*will be considered as username)"
+                                name="username"
                                 type="text"
-                                placeholder="Jane"
+                                placeholder="Jane Lin"
                             />
-
+                            <br />
                             <MyTextInput
-                                label="Email Address"
+                                label="Email"
                                 name="email"
                                 type="email"
                                 placeholder="jane@formik.com"
@@ -147,7 +148,7 @@ export default function Register(){
                             </Button>
                             <br/>
                             <div className="my-1">Already have an account?</div>
-                            <Button variant="success" type="submit" className="mt-2 mb-2" onClick={()=>{
+                            <Button variant="success" type="button" className="mt-2 mb-2" onClick={()=>{
                               history.push('/login')
                             }}>
                               Log in to your account</Button>
