@@ -20,7 +20,7 @@ const App = ()=>{
     const { user } = useContext(AuthContext);
     const [isLoggedIn,setIsLoggedIn] = React.useState(false)
     const User = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
-    console.log(user,isLoggedIn)
+    // console.log(user,isLoggedIn)
     return (
         <>
         <Router>

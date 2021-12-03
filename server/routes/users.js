@@ -10,7 +10,7 @@ const router = express.Router();
 
 // update user
 router.put('/:id',async(req,res)=>{
-    console.log(req.body.userId)
+    // console.log(req.body.userId)
     if(req.body.userId === (req.params.id || req.body.isAdmin) ){
         // User wants to change password
         if(req.body.password){
@@ -40,7 +40,7 @@ router.put('/:id',async(req,res)=>{
     }
 })
 router.put('/:id/info',async(req,res)=>{
-    console.log(req.body)
+    // console.log(req.body)
     if(req.body.userId == (req.params.id || req.body.isAdmin) ){
          try{
             const user = await User.findByIdAndUpdate(req.params.id,{ $set:req.body });
@@ -74,7 +74,7 @@ router.delete('/:id',async(req,res)=>{
 router.get('/',async(req,res)=>{
     const userId = req.query.userId;
     const username = req.query.username;
-    console.log(userId,username)
+    // console.log(userId,username)
     if(userId && !mongoose.isValidObjectId(userId)){
         return res.status(404).json("User not found");
     }
@@ -93,7 +93,7 @@ router.get('/',async(req,res)=>{
 router.get('/:userId/friends',async (req,res)=>{
     try{
         const currentUser = await User.findById(req.params.userId);
-        console.log(currentUser)
+        // console.log(currentUser)
         const friends = await Promise.all(
             currentUser.followings.map((friendId) => {
               return User.findById(friendId);
@@ -115,11 +115,11 @@ router.get('/:userId/friends',async (req,res)=>{
 // follow a user
 router.put('/:id/follow',async(req,res)=>{
     const {id} = req.params;
-    console.log(id,req.body.userId)
+    // console.log(id,req.body.userId)
     try{
     const user = await User.findById(id);
     const currentUser = await User.findOne({username:req.body.username})
-    console.log(id,req.body.userId)
+    // console.log(id,req.body.userId)
     if(!user.followers.includes(req.body.userId)){
         await user.updateOne({$push:{followers:currentUser._id}}) 
         await currentUser.updateOne({$push:{followings:id}})
@@ -137,11 +137,11 @@ router.put('/:id/follow',async(req,res)=>{
 // unfollow a user
 router.put('/:id/unfollow',async(req,res)=>{
     const {id} = req.params;
-    console.log(id,req.body.username)
+    // console.log(id,req.body.username)
     try{
     const user = await User.findById(id);
     const currentUser = await User.findOne({username:req.body.username})
-    console.log(id,currentUser)
+    // console.log(id,currentUser)
     if(user.followers.includes(currentUser._id)){
         await user.updateOne({$pull:{followers:currentUser._id}}) 
         await currentUser.updateOne({$pull:{followings:id}})
@@ -159,7 +159,7 @@ router.put('/:id/unfollow',async(req,res)=>{
 
 router.put('/:id/events',async(req,res)=>{
     const {id} = req.params;
-    console.log(req.body)
+    // console.log(req.body)
     if(!mongoose.isValidObjectId(id)){
         return res.status(404).json("User not found");
     }

@@ -17,7 +17,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Post({user}){
-    console.log(user)
     // const {user} = React.useContext(AuthContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const desc = React.useRef();

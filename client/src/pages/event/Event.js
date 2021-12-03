@@ -58,7 +58,7 @@ export default function Events (props){
       }
       setEv(events)
   },[Users,Users.title,ev])
-  console.log(ev)
+  // console.log(ev)
   return (
   <div>
     <h3 className="text-center text-primary fw-bold">Event Calender</h3>

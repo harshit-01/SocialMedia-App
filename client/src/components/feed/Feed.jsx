@@ -24,7 +24,6 @@ export default function Feed({username,id,location,User}){
     // console.log(user)
     useEffect(()=>{
         const fetchPosts = async()=>{
-            console.log(location,username)
             const res = location == "profile" ? await axios.get(url +`/posts/profile/${uname}`):await axios.get(url +`/posts/timeline/${uname}`)
             if(res.data.length>0){
                 const arr = res.data.sort(function(a,b){
@@ -38,7 +37,7 @@ export default function Feed({username,id,location,User}){
             else{
             console.log(res)
             }
-            console.log(dataPost)
+            // console.log(dataPost)
             return res;
         }
         fetchPosts()

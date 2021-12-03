@@ -30,7 +30,7 @@ export default function FriendProfile({setIsLoggedIn}){
         const fetchUser = async()=>{
             const res = await axios.get(url +`/users?username=${params.username}`)
             setUsers(res.data);
-            console.log(res.data)
+            // console.log(res.data)
             return res;
         }
         fetchUser()
@@ -50,7 +50,7 @@ export default function FriendProfile({setIsLoggedIn}){
             else{
             console.log(res)
             }
-            console.log(dataPost)
+            // console.log(dataPost)
             return res;
         }
         fetchPosts()

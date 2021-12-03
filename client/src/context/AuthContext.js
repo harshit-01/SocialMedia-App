@@ -13,7 +13,7 @@ export const AuthContextProvider = ({children})=>{
     // useEffect(()=>{
     //     sessionStorage.setItem("user",JSON.stringify((state.user?.username)))
     //   },[state.user])
-      console.log(state.user)
+    //   console.log(state.user)
     return(
         <AuthContext.Provider value={{user:state.user,isFetching:state.isFetching,error:state.error,dispatch}}>
             {children}

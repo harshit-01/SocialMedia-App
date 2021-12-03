@@ -54,7 +54,7 @@ router.delete('/:id/:userId',async(req,res)=>{
     try{
         const {id,userId} = req.params;
         const post = await Post.findById(id);
-        console.log(id,post,req.params);
+        // console.log(id,post,req.params);
         if(userId === post.userId){
             //const updatedPost  = await Post.findByIdAndUpdate(id,{$set:req.body});
             await post.deleteOne();
@@ -149,7 +149,7 @@ router.get("/profile/:username", async (req, res) => {
   });
 router.patch('/:id/comment',async(req,res)=>{
     const {id} = req.params;
-    console.log(req.body)
+    // console.log(req.body)
     try{
         if(!mongoose.isValidObjectId(req.body.userId)){
             return res.status(404).json("User not found");
@@ -157,7 +157,7 @@ router.patch('/:id/comment',async(req,res)=>{
         else{
             const post = await Post.findById(id)
             const updPost = await post.updateOne({$push:{comments:req.body.comments}})
-            console.log(post)
+            // console.log(post)
             // const updUser = await user.updateOne({comments:req.body.comment});
             res.status(200).json(updPost);
         }

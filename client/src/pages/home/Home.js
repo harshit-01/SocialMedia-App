@@ -24,7 +24,7 @@ const Home = ({setIsLoggedIn})=>{
         }
             fetchUser()
     },[uname])
-    console.log(Users)
+    // console.log(Users)
     return(
         <>  
             <Topbar text={text} setText={setText} location="home" Users={Users} setIsLoggedIn={setIsLoggedIn}/>

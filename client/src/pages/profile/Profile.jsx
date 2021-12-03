@@ -19,7 +19,7 @@ export default function Profile({setIsLoggedIn}){
         const fetchUser = async()=>{
             const res = await axios.get(url +`/users?username=${uname}`)
             setUsers(res.data);
-            console.log(res.data)
+            // console.log(res.data)
             return res;
         }
         fetchUser()
