@@ -96,7 +96,7 @@ export default function PostContent({val,onDelete}){
         <Container className="post mb-3">
             <Row className="postWrapper">
                 <Col>
-                   <Card className="mt-3" style={{maxWidth:"45rem"}}>
+                   <Card className="mt-3" style={{minWidth:"17rem"}}>
                     <Link to={`/profile/${val.username}`} style={{textDecoration:"none",color:"black"}}>
                     {Users.profilePicture ?
                         <div className="d-flex justify-content-start align-items-center">

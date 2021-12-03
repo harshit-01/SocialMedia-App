@@ -72,7 +72,7 @@ export default function Post({user}){
         <Container className="share">
             <Row className="shareWrapper">
                 <Col className="shareTop">
-                    <Card border="info shadow">
+                    <Card border="info shadow" style={{minWidth:"16rem"}}>
                         <Card.Header className="d-flex">
                             <img src={user.profilePicture? PF+ user.profilePicture:"https://i.pinimg.com/564x/5b/6c/ee/5b6cee1b913d46e4cbc8e2a45b651889.jpg"} alt="person" className="shareProfileImg me-2 mb-2" />
                             {/* <input className="shareInput me-1" placeholder="What's in your mind?" ref={desc}></input> */}

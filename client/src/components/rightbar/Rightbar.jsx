@@ -221,7 +221,7 @@ export default function RightBar({text,profile,user}){
                     keyboard={false}
                 >
                     <Modal.Header >
-                    <Modal.Title>User Information</Modal.Title>
+                    <Modal.Title className="fw-bold text-primary">User Information</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                     <Formik
