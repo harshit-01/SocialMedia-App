@@ -40,7 +40,7 @@ router.put('/:id',async(req,res)=>{
     }
 })
 router.put('/:id/info',async(req,res)=>{
-    // console.log(req.body)
+    console.log(req.body)
     if(req.body.userId == (req.params.id || req.body.isAdmin) ){
          try{
             const user = await User.findByIdAndUpdate(req.params.id,{ $set:req.body });
