@@ -78,7 +78,7 @@ export default function PostContent({val,onDelete}){
     const {user} = React.useContext(AuthContext)
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [Users,setUsers] = React.useState({});
-    const url = "http://localhost:5000/api";
+    const url = "https://tieup-project.herokuapp.com/api";
     const uname = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
     React.useEffect(()=>{
         const fetchUser = async()=>{
@@ -96,7 +96,7 @@ export default function PostContent({val,onDelete}){
         <Container className="post mb-3">
             <Row className="postWrapper">
                 <Col>
-                   <Card className="mt-3" style={{minWidth:"17rem"}}>
+                   <Card className="mt-3 card-width">
                     <Link to={`/profile/${val.username}`} style={{textDecoration:"none",color:"black"}}>
                     {Users.profilePicture ?
                         <div className="d-flex justify-content-start align-items-center">
@@ -110,7 +110,7 @@ export default function PostContent({val,onDelete}){
                          className="my-2 mx-2"
                         /> 
                         <span className="fw-bold fs-5 me-2">{val.username}</span>
-                        <div className="text-muted">{moment(val.createdAt.split('Z')[0]).fromNow()}</div>
+                        <div className="text-muted">{moment(val.createdAt).fromNow()}</div>
                         </div>:
                         <CardHeader
                         avatar={
@@ -124,7 +124,7 @@ export default function PostContent({val,onDelete}){
                         </IconButton>
                         }
                         title={val.username}
-                        subheader={moment(val.createdAt.split('Z')[0]).fromNow()}
+                        subheader={moment(val.createdAt).fromNow()}
                     />}
                     </Link>
                     <CardContent>
@@ -137,8 +137,8 @@ export default function PostContent({val,onDelete}){
                         component="img"
                         className="w-100 image"
                         // min-height="194"
-                        image={"http://localhost:5000/images/"+val.img}
-                        alt="Paella dish"
+                        image={val.img}
+                        alt={val.img}
                     />:  
                     <CardMedia
                     component="img"
@@ -187,9 +187,9 @@ export default function PostContent({val,onDelete}){
                         <ExpandMoreIcon /> 
                         </ExpandMore>
                     </CardActions>
-
+                    {console.log(val.comments)}
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
-                        {comment ? 
+                        {comment || val.comments.length>0? 
                             <>
                             <p className="ms-3">Comments</p>
                             <ul>

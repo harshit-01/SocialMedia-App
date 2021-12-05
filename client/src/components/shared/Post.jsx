@@ -13,6 +13,7 @@ import InputEmoji from "react-input-emoji";
 import axios from "axios"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import FileBase from 'react-file-base64';
 
 
 
@@ -22,47 +23,87 @@ export default function Post({user}){
     const desc = React.useRef();
     const [file,setFile] = React.useState(null);
     const [text, setText] = React.useState("");
-    const url = "http://localhost:5000/api";
+    const url = "https://tieup-project.herokuapp.com/api";
+    let dataUrl ="";
     function handleOnEnter(text) {
       console.log("enter", text);
     }
+    const imgRef = React.useRef();
+    const [image, setImage] = React.useState(null)
+    const onImageChange = (event) => {
+            if (event.target.files && event.target.files[0]) {
+                setImage(URL.createObjectURL(event.target.files[0]));
+            }
+            // if (event.target.files && event.target.files[0]) {
+            //     let reader = new FileReader();
+            //     var fileByteArray = [];
+            //     reader.onload = (e) => {
+            //         setImage({image: e.target.result});
+            //         // if (e.target.readyState == FileReader.DONE) {
+            //         //     var arrayBuffer = e.target.result,
+            //         //         array = new Uint8Array(arrayBuffer);
+            //         //     for (var i = 0; i < array.length; i++) {
+            //         //         fileByteArray.push(array[i]);
+            //         //     }
+            //         //     setImage({image: fileByteArray});
+            //         // }
+            //     };
+            //     reader.readAsBinaryString(event.target.files[0])
+            //     // reader.readAsDataURL(event.target.files[0]);
+            //     // reader.readAsArrayBuffer(event.target.files[0]); 
+            // }
+    }
+    console.log(image)
     const submitHandler = async(e)=>{
+        // debugger;
         e.preventDefault();
         const newPost = {
             userId:user._id,
             username:user.username,
             desc:text,
+            img:image
         }
         // console.log("post", newPost);
-        if(file){
-            const data = new FormData();
-            const fileName = Date.now() + file.name;
-            data.append("name", fileName);
-            data.append("file", file);
-            newPost.img = fileName;
-            try{
-                await axios.post(url+'/upload',data)
-            }
-            catch(err){
-                console.log(err);
-            }
-        }
+        // if(file){
+        //     const data = new FormData();
+        //     const fileName = Date.now() + file.name;
+        //     data.append("name", fileName);
+        //     data.append("file", file);
+        //     //newPost.img = fileName;
+        //     try{
+        //         await axios.post(url+'/upload',data)
+        //     }
+        //     catch(err){
+        //         console.log(err);
+        //     }
+        // }
         try{
             await axios.post(url+'/posts',newPost)
+            toast.info('Post successfully created', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme:"colored"
+                });
         }
         catch(err){
             console.log(err)
+            toast.error('Sorry! something went wrong', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme:"colored"
+                });
         }
-        toast.info('Post successfully created', {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme:"colored"
-            });
+        
         setTimeout(()=>{
         window.location.reload();
         },3000)
@@ -94,10 +135,15 @@ export default function Post({user}){
                                 <label htmlFor="file" className="shareOption" role="button" data-toggle="tooltip" title="Attach File">
                                 <PermMediaIcon className="shareIcon" htmlColor="tomato"/>
                                 <span className="shareOptionText ms-2 me-2">Photo or video</span>
-                                <input type="file" id="file" name="file" accept=".png,.jpeg,.jpg"
-                                onChange ={(e)=>{
-                                    setFile(e.target.files[0])
-                                }} className="my-2 d-none"/>
+                                    {/* <input type="file" id="file" name="file" accept="image/*"
+                                    onChange ={(e)=>{
+                                        console.log(e.target.files)
+                                        onImageChange(e);
+                                        setFile(e.target.files[0])
+                                    }} className="my-2 d-none" ref={imgRef}/> */}
+                                    <FileBase type="file" multiple={false} onDone={({base64}) => setImage(base64)} 
+                                    
+                                    /> 
                                 </label>
                                 <LabelIcon className="labelIcon" htmlColor="blue"/>
                                 <span className="shareOptionText ms-2 me-2">Tag</span>

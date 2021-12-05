@@ -35,7 +35,7 @@ export default function Events (props){
   };
   const [ev,setEv] =React.useState([]);
   const [Users,setUsers] = React.useState({});
-  const url = "http://localhost:5000/api";
+  const url = "https://tieup-project.herokuapp.com/api";
   const updUser = async()=>{
     const res = await axios.put(url +`/users/6196897fe7209080cd5bce71/events`,
     {'title':title,"start":start,"end":end})

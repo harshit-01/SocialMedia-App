@@ -72,7 +72,7 @@ export default function RightBar({text,profile,user}){
         setConf(true);
     }
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
-    const url = "http://localhost:5000/api";
+    const url = "https://tieup-project.herokuapp.com/api";
     useEffect(() => {
         const getFriends = async()=>{
             const res = await axios.get(url +`/users/${user._id}/friends`);

@@ -12,7 +12,7 @@ const Home = ({setIsLoggedIn})=>{
     const [text,setText] = useState(false);
     const [Users,setUsers] = React.useState({});
     const params = useParams();
-    const url = "http://localhost:5000/api";
+    const url = "https://tieup-project.herokuapp.com/api";
     const user = React.useContext(AuthContext)
     const uname = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
     React.useEffect(()=>{

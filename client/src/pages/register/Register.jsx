@@ -57,7 +57,7 @@ const MyTextInput = ({ label, ...props }) => {
 
 export default function Register(){
     const history = useHistory()
-    const url = "http://localhost:5000/api"
+    const url = "https://tieup-project.herokuapp.com/api"
     return(
         <div className="login"> 
             <Row className="loginWrapper">

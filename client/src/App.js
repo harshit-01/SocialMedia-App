@@ -32,7 +32,7 @@ const App = ()=>{
                     {User && isLoggedIn? <Redirect to="/" />:<Login setIsLoggedIn={setIsLoggedIn}/>}
                 </Route>
                 <Route path="/signup">
-                    {User || isLoggedIn?<Redirect to="/" />:<Register />} 
+                    {User && isLoggedIn?<Redirect to="/" />:<Register />} 
                 </Route>
                 <Route path="/qna">
                     <Chat />

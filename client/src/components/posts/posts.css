@@ -1,0 +1,35 @@
+@media (max-width: 400px){
+    .card-width{
+        width:16.5rem;
+    }
+}
+@media (min-width: 400px){
+    .card-width{
+        width:22rem;
+    }
+}
+@media (min-width: 768px){
+    .card-width{
+        width:26rem;
+    }
+}
+@media (min-width: 900px){
+    .card-width{
+        width:32rem;
+    }
+}
+@media (min-width: 1240px){
+    .card-width{
+        width:42rem;
+    }
+}
+@media (min-width: 1440px){
+    .card-width{
+        width:45rem;
+    }
+}
+@media (min-width: 1700px){
+    .card-width{
+        width:60rem;
+    }
+}

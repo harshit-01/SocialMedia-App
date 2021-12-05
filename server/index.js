@@ -15,7 +15,7 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 try{
-mongoose.connect(process.env.MONGO_URL,{
+mongoose.connect(process.env.CONNECTION_URL,{
     useNewUrlParser:true,
     useUnifiedTopology:true
 },()=>{
@@ -28,13 +28,21 @@ catch(err){
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 // middleware 
 
-app.use(express.json()) // bodyParser
-app.use(cors())
+app.use(express.json({limit: '30mb',extended: true})) // bodyParser
+app.use(express.urlencoded({limit:"30mb",extended:true}));
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header("Access-Control-Allow-Headers", "x-access-token, Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+app.use(cors({origin: true, credentials: true}))
 app.use((helmet()));
 app.use(morgan("common"));
-// app.get("/",(req,res)=>{
-//     res.send("Welcome to the homepage");
-// })
+app.get("/",(req,res)=>{
+    
+    res.send("Welcome to the homepage");
+})
 
 // const upload = multer({ dest: 'uploads/' })
 const storage = multer.diskStorage({

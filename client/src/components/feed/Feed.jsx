@@ -17,11 +17,21 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function Feed({username,id,location,User}){
     const [dataPost,setDataPost] = useState([]);
     const {user} = React.useContext(AuthContext)
-    const url = "http://localhost:5000/api";
+    const url = "https://tieup-project.herokuapp.com/api";
     const moveToAddPost = useRef(null);
     const moveToTop = useRef(null);
     const uname = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
     // console.log(user)
+    const convertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = () => {
+            resolve(reader.result);
+        };
+        // reader.readAsDataURL(blob);
+        reader.readAsBinaryString()
+    });
+    
     useEffect(()=>{
         const fetchPosts = async()=>{
             const res = location == "profile" ? await axios.get(url +`/posts/profile/${uname}`):await axios.get(url +`/posts/timeline/${uname}`)
@@ -69,6 +79,8 @@ export default function Feed({username,id,location,User}){
                     }}><ArrowDownwardIcon sx={{ fontSize: 25 }} /></Button>
                 </h4>
                 {dataPost.length>0 ? dataPost.map((d,index)=>{
+                    // debugger;
+                    console.log(d.img)
                     return(
                     <PostContent  val={d} onDelete={onDelete}/>
                     )

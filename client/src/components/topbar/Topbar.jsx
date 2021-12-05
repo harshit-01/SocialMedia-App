@@ -21,7 +21,7 @@ export default function Topbar({text,setText,location,Users,setIsLoggedIn}) {
         const submitHandler = (e)=>{
             e.preventDefault();
             if(Users.username !== inpRef.current.value){
-                window.open(`/friendProfile/${inpRef.current.value}`,'_blank', );
+                history.push(`/friendProfile/${inpRef.current.value}`);
             }
             else{
                 toast.info("You can't search yourself", {

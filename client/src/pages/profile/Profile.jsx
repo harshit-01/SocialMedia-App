@@ -13,7 +13,7 @@ export default function Profile({setIsLoggedIn}){
     const [text,setText] = useState(false);
     const [Users,setUsers] = React.useState({});
     const params = useParams();
-    const url = "http://localhost:5000/api";
+    const url = "https://tieup-project.herokuapp.com/api";
     const uname = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
     React.useEffect(()=>{
         const fetchUser = async()=>{

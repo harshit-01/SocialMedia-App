@@ -23,7 +23,7 @@ export default function FriendProfile({setIsLoggedIn}){
     const [Users,setUsers] = React.useState({});
     const [dataPost,setDataPost] = useState([]);
     const params = useParams();
-    const url = "http://localhost:5000/api";
+    const url = "https://tieup-project.herokuapp.com/api";
     const uname = params.username ?params.username:null;
     const currentUser = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
     React.useEffect(()=>{
@@ -59,7 +59,7 @@ export default function FriendProfile({setIsLoggedIn}){
     const [isFollowed,setIsFollowed] = React.useState(false)
     const inpRef = React.useRef();
     const submitHandler = (value)=>{
-            window.open(`/friendProfile/${inpRef.current.value}`,'_blank', );
+        history.push(`/friendProfile/${inpRef.current.value}`);
     }
     const onDelete  = async (val,id)=>{
         // await axios.delete(url +`/posts/${val}/${id}`)
