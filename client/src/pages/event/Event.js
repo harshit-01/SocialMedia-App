@@ -36,21 +36,24 @@ export default function Events (props){
   const [ev,setEv] =React.useState([]);
   const [Users,setUsers] = React.useState({});
   const url = "https://tieup-project.herokuapp.com/api";
+  // const url = "http://localhost:5000/api"
+  const val = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
   const updUser = async()=>{
-    const res = await axios.put(url +`/users/6196897fe7209080cd5bce71/events`,
+    const res = await axios.put(url +`/users/${Users._id}/events`,
     {'title':title,"start":start,"end":end})
     return res;
   }
+  console.log(val)
     useEffect(()=>{
         const fetchUser = async(title,start,end)=>{
-        const res = await axios.get(url +`/users?userId=6196897fe7209080cd5bce71`)
+        const res = await axios.get(url +`/users?username=${val}`)
         setUsers(res.data);
         // console.log(res.data,Users._id)
         return res;
     }
       fetchUser()
 
-  },[])
+  },[val])
   React.useEffect(()=>{
       if(Users && Users.title && Users.title.length>0){
         events.push({'title':Users.title[Users.title.length-1],'allDay': true,"start":new Date(Users.start[Users.start.length-1]),"end":new Date (Users.end[Users.end.length-1])});

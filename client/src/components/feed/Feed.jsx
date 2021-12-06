@@ -12,12 +12,14 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SkeletonLoading from "./../../skeletonLoading"
 
 
 export default function Feed({username,id,location,User}){
     const [dataPost,setDataPost] = useState([]);
     const {user} = React.useContext(AuthContext)
     const url = "https://tieup-project.herokuapp.com/api";
+    // const url = "http://localhost:5000/api"
     const moveToAddPost = useRef(null);
     const moveToTop = useRef(null);
     const uname = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
@@ -80,11 +82,13 @@ export default function Feed({username,id,location,User}){
                 </h4>
                 {dataPost.length>0 ? dataPost.map((d,index)=>{
                     // debugger;
-                    console.log(d.img)
                     return(
                     <PostContent  val={d} onDelete={onDelete}/>
                     )
-                }):<div className="ms-4 mb-3">No post yet.</div>}
+                }):<>
+                    {/* <div className="ms-4 mb-3">No post yet.</div> */}
+                    <SkeletonLoading heading={"No post yet."}/>
+                </>}
             </div>
             <div className="feedWrapper mb-5 mb-md-5">
                 <h4 className="fw-bolder ms-4 mb-4" ref={moveToAddPost}>

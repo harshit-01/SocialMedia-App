@@ -73,10 +73,13 @@ export default function RightBar({text,profile,user}){
     }
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const url = "https://tieup-project.herokuapp.com/api";
+    // const url = "http://localhost:5000/api"
     useEffect(() => {
         const getFriends = async()=>{
+            if(user){
             const res = await axios.get(url +`/users/${user._id}/friends`);
             setFriends(res.data);
+            }
         }
         getFriends();
     },[user._id])
@@ -99,18 +102,20 @@ export default function RightBar({text,profile,user}){
                     />:null}
                     </div>
                         <h4 className="rightbarTitle mt-1">Online Friends</h4>
-                        <ul className="rightbarFriendList">
-                            {text? user.followings.length>0 ? user.followings.map((val,i)=>{
+                        <ul className="rightbarFriendList ps-2">
+                            {text? user.followings && user.followings.length>0 ? user.followings.map((val,i)=>{
+                            // console.log(val)
                             return(
-                            <li className="rightbarFriend mb-1" style={{listStyleType: "numeric"}}>
-                                <div className="rightbarProfileImgConatiner ms-1">
+                            <li className="rightbarFriend mb-1 ms-2" style={{listStyleType: "numeric"}}>
+                                <div className="rightbarProfileImgContainer ms-1 d-flex flew-wrap">
                                     {val.profilePicture?
                                     <img className="rightbarProfileImg" src={PF+ val.profilePicture} alt=""></img>:
                                     i%2 ==0 ?
-                                    <Avatar sx={{ bgcolor: deepOrange[500] }}>{val.username[0]}</Avatar>:
-                                    <Avatar sx={{ bgcolor: deepPurple[500] }}>{val.username[0]}</Avatar>
+                                    val?
+                                    <Avatar sx={{ bgcolor: deepOrange[500] }}>{val[0]}</Avatar>:"":val?
+                                    <Avatar sx={{ bgcolor: deepPurple[500] }}>{val[0]}</Avatar>:""
                                     }
-                                    <span className="ms-2">{val.username}</span>
+                                    <span className="ms-2 mt-2">{val}</span>
                                 </div>
                             </li>)}):"1. None": ""}
                         </ul>
@@ -164,16 +169,16 @@ export default function RightBar({text,profile,user}){
                 </div>
                 </div>
                 <h4 className="rightbarTitle mt-1">Online Friends</h4>
-                        <ul className="rightbarFriendList">
+                        <ul className="rightbarFriendList ps-2">
                             {text? user.followings && user.followings.length>0 ? user.followings.map((val)=>{
                             return(
-                            <li className="rightbarFriend mb-1" style={{listStyleType: "numeric"}}>
-                                <div className="rightbarProfileImgConatiner ms-1">
+                            <li className="rightbarFriend mb-1 ms-2" style={{listStyleType: "numeric"}}>
+                                <div className="rightbarProfileImgConatiner ms-1 d-flex">
                                 {val.profilePicture ?
-                                    <img className="rightbarProfileImg" src={PF+val.profilePicture} alt=""></img>:
-                                    <Avatar sx={{ bgcolor: deepPurple[500] }}>{val.username[0]}
-                                    </Avatar>}
-                                    <span className="ms-2">{val.username}</span>
+                                    <img className="rightbarProfileImg" src={PF+val.profilePicture} alt=""></img>:val?
+                                    <Avatar sx={{ bgcolor: deepPurple[500] }}>{val[0]}
+                                    </Avatar>:""}
+                                    <span className="ms-2 mt-2">{val}</span>
                                 </div>
                             </li>)}):"1. None": ""}
                         </ul>

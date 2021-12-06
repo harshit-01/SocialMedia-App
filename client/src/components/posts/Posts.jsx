@@ -79,6 +79,7 @@ export default function PostContent({val,onDelete}){
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [Users,setUsers] = React.useState({});
     const url = "https://tieup-project.herokuapp.com/api";
+    //const url = "http://localhost:5000/api"
     const uname = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
     React.useEffect(()=>{
         const fetchUser = async()=>{
@@ -109,7 +110,7 @@ export default function PostContent({val,onDelete}){
                          style={{ width: "45px", height: "45px", objectFit: "cover",borderRadius: "50%",fontWeight:"bold"}}
                          className="my-2 mx-2"
                         /> 
-                        <span className="fw-bold fs-5 me-2">{val.username}</span>
+                        <span className="fw-bold fs-5 me-2">{val.username?val.username:null}</span>
                         <div className="text-muted">{moment(val.createdAt).fromNow()}</div>
                         </div>:
                         <CardHeader
@@ -149,10 +150,10 @@ export default function PostContent({val,onDelete}){
                     <CardActions disableSpacing>
                         <IconButton aria-label="thumbs" onClick={()=>{
                                  try{
-                                    axios.patch(url+`/posts/${val._id}/like`,{userId:user._id})
+                                    axios.patch(url+`/posts/${val._id}/like`,{userId:uname})
                                 }
                                 catch(err){
-
+                                    console.log(err)
                                 }
                                 isLiked ? setLikeCount(likeCount-1):setLikeCount(likeCount+1);
                                 setIsLiked(!isLiked);
@@ -162,7 +163,7 @@ export default function PostContent({val,onDelete}){
                         </IconButton>
                         <IconButton aria-label="add to favorites" onClick={()=>{
                                 try{
-                                    axios.patch(url+`/posts/${val._id}/heart`,{userId:user._id})
+                                    axios.patch(url+`/posts/${val._id}/heart`,{userId:uname})
                                 }
                                 catch(err){
                                     console.log(err)
@@ -187,7 +188,7 @@ export default function PostContent({val,onDelete}){
                         <ExpandMoreIcon /> 
                         </ExpandMore>
                     </CardActions>
-                    {console.log(val.comments)}
+                    {/* {console.log(val.comments)} */}
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         {comment || val.comments.length>0? 
                             <>

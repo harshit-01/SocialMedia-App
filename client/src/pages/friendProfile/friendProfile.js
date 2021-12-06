@@ -58,8 +58,24 @@ export default function FriendProfile({setIsLoggedIn}){
     const history = useHistory();
     const [isFollowed,setIsFollowed] = React.useState(false)
     const inpRef = React.useRef();
-    const submitHandler = (value)=>{
-        history.push(`/friendProfile/${inpRef.current.value}`);
+    const submitHandler = (e)=>{
+        // history.push(`/friendProfile/${inpRef.current.value}`);
+        e.preventDefault();
+        if(Users.username !== inpRef.current.value){
+            history.push(`/friendProfile/${inpRef.current.value}`);
+        }
+        else{
+            toast.info("You can't search yourself", {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme:"colored"
+                });
+        }
     }
     const onDelete  = async (val,id)=>{
         // await axios.delete(url +`/posts/${val}/${id}`)

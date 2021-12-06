@@ -41,7 +41,7 @@ router.get("/timeline/:username", async (req, res) => {
       const userPosts = await Post.find({ userId: currentUser._id });
       const friendPosts = await Promise.all(
         currentUser.followings.map((friendId) => {
-          return Post.find({ userId: friendId });
+          return Post.find({ username: friendId });
         })
       );
       res.status(200).json(userPosts.concat(...friendPosts));
@@ -99,7 +99,7 @@ router.patch('/:id/like',async (req,res) => {
             return res.status(404).json("Post not found");
         }
         else{
-            // console.log(post.likes.includes(req.body.userId),req.body.userId,post)
+            console.log(req.body.userId)
             if(!post.likes.includes(req.body.userId)){
             await post.updateOne({$push:{likes:req.body.userId}});
             res.status(200).json("You have liked the post")

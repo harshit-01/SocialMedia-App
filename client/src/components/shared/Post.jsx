@@ -53,7 +53,7 @@ export default function Post({user}){
             //     // reader.readAsArrayBuffer(event.target.files[0]); 
             // }
     }
-    console.log(image)
+    // console.log(image)
     const submitHandler = async(e)=>{
         // debugger;
         e.preventDefault();
@@ -103,11 +103,12 @@ export default function Post({user}){
                 theme:"colored"
                 });
         }
-        
+
         setTimeout(()=>{
         window.location.reload();
         },3000)
     }
+    const [isDisabled,setIsDisabled] = React.useState(false);
     return(
         <Container className="share">
             <Row className="shareWrapper">
@@ -140,10 +141,7 @@ export default function Post({user}){
                                         console.log(e.target.files)
                                         onImageChange(e);
                                         setFile(e.target.files[0])
-                                    }} className="my-2 d-none" ref={imgRef}/> */}
-                                    <FileBase type="file" multiple={false} onDone={({base64}) => setImage(base64)} 
-                                    
-                                    /> 
+                                    }} className="my-2 d-none" ref={imgRef}/> */} 
                                 </label>
                                 <LabelIcon className="labelIcon" htmlColor="blue"/>
                                 <span className="shareOptionText ms-2 me-2">Tag</span>
@@ -151,7 +149,12 @@ export default function Post({user}){
                                 <span className="shareOptionText ms-2 me-2">Location</span>
                                 <EmojiEmotionsIcon className="shareIcon" color="secondary"/>
                                 <span className="shareOptionText ms-2 me-2">Feelings</span>
-                                <Button size="small" type="submit" style={{float: 'right'}}>Share</Button>
+                                <FileBase type="file" multiple={false} onDone={({base64}) => setImage(base64)} />
+                                <Button size="small" type="submit" style={{float: 'right'}}
+                                disabled={isDisabled} onClick={(e)=>{
+                                    submitHandler(e)
+                                    setIsDisabled(true);
+                                }}>Share</Button>
                             </div>
                             </form>
                         </Card.Text>
