@@ -2,7 +2,6 @@ import React from 'react';
 import "./feed.css";
 import Post from "./../shared/Post";
 import PostContent from "./../posts/Posts";
-// import {data} from "./../../dummyData"
 import {useState,useEffect,useRef} from "react"
 import axios from "axios"
 import { compose } from "@mui/system";
@@ -23,7 +22,6 @@ export default function Feed({username,id,location,User}){
     const moveToAddPost = useRef(null);
     const moveToTop = useRef(null);
     const uname = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
-    // console.log(user)
     const convertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onerror = reject;
