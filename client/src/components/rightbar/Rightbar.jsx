@@ -89,7 +89,7 @@ export default function RightBar({text,profile,user}){
     const HomeRightBar = ()=>{
         return(
             <>
-                 <div className="birthdayContainer ">
+                 <div className="birthdayContainer mt-3 mt-md-0">
                     <img className="birthdayImg mb-2 " src="/assets/gift.png" alt="" 
                     role="button"/>
                     <span> Alex and 3 others have birthday today .</span>
@@ -148,7 +148,7 @@ export default function RightBar({text,profile,user}){
     const ProfileRightBar = ()=>{
         return(
             <>
-                <h4 className="rightbarTitle">User information
+                <h4 className="rightbarTitle mt-4 mt-md-0">User information
                 <span  data-toggle="tooltip" title="Update user info">
                 <EditIcon className="ms-2 mb-1" role="button" onClick={()=>{
                     setOp(true);
