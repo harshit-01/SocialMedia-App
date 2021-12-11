@@ -34,7 +34,7 @@ const Home = ({setIsLoggedIn})=>{
                 </Col>
                 <Col xs={12} md={4} className="d-flex mt-2">
                     <Rightbar className="feedRightbar" text={text} 
-                    profile="home" setText={setText}  user={Users}/>
+                    profile="home" setText={setText}  user={Users} isFri={false}/>
                 </Col>
             </Row>
         </>

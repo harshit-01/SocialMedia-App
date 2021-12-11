@@ -71,7 +71,7 @@ export default function PostContent({val,onDelete}){
         setExpanded(!expanded);
     };
     const [likeCount, setLikeCount] = React.useState(val.likes.length>0?val.likes.length:0)
-    const [heartCount, setHeartCount] = React.useState(val.heart.length>0 ? val.heart:0)
+    const [heartCount, setHeartCount] = React.useState(val.heart.length>0 ?val.heart.length:0)
     const [isLiked,setIsLiked] = React.useState(false);
     const [isHeartCounted,setIsHeartCounted] = React.useState(false);
     const [comment,setComment] = React.useState(false);
@@ -91,6 +91,26 @@ export default function PostContent({val,onDelete}){
         }
         fetchUser()
     },[val.userId,uname])
+    // console.log(val)
+    React.useEffect(()=>{
+        if(val && val.likes.length>0){
+            for(let i=0;i<val.likes.length;i++){
+                if(uname == val.likes[i]){
+                    setIsLiked(true);
+                    break;
+                } 
+            }
+        }
+        if(val && val.heart.length>0){
+            for(let i=0;i<val.heart.length;i++){
+                if(uname == val.heart[i]){
+                    setIsHeartCounted(true);
+                    break;
+                } 
+            }
+        }
+    },[val.likes,val.heart])
+    // console.log(isLiked,isHeartCounted)
     const [reaction,setReaction] = React.useState(null);
     const commentRef = React.useRef(null);
     return(

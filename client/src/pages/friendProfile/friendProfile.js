@@ -197,7 +197,7 @@ export default function FriendProfile({setIsLoggedIn}){
                 </Col>
                 <Col xs={12} md={4} className="d-flex mt-2">
                     <Rightbar className="feedRightbar" text={text} profile="profile"
-                    setText={setText} user={Users}/>
+                    setText={setText} user={Users} isFri ={true}/>
                 </Col>
             </Row>
             <ToastContainer position="top-right"

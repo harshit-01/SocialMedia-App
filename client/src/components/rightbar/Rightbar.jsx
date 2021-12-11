@@ -57,7 +57,7 @@ const MyTextInput = ({ label, ...props }) => {
   
 
 
-export default function RightBar({text,profile,user}){
+export default function RightBar({text,profile,user,isFri}){
     const { width, height } = useWindowSize();
     const [show, setShow] = useState(false);
     const [conf,setConf] = useState(false);
@@ -149,10 +149,11 @@ export default function RightBar({text,profile,user}){
         return(
             <>
                 <h4 className="rightbarTitle mt-4 mt-md-0">User information
+                {isFri != true ?
                 <span  data-toggle="tooltip" title="Update user info">
                 <EditIcon className="ms-2 mb-1" role="button" onClick={()=>{
                     setOp(true);
-                }}/></span>
+                }}/></span>:""}
                 </h4>
                 <div className="rightbarInfo">
                 <div className="rightbarInfoItem">

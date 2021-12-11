@@ -66,6 +66,7 @@ export default function Topbar({text,setText,location,Users,setIsLoggedIn}) {
                         }}>Home</Link></span>
                         <span className="topbarLink me-1" role="button" onClick ={()=>{
                             sessionStorage.removeItem("user");
+                            sessionStorage.removeItem('name')
                             setIsLoggedIn(false)
                             history.push('/login')
                         }}>Logout</span>

@@ -8,6 +8,8 @@ import {loginCall} from "./../../apiCall"
 import {AuthContext} from "./../../context/AuthContext"
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -63,7 +65,6 @@ const MyTextInput = ({ label, ...props }) => {
 export default function Login({setIsLoggedIn}){
     const history = useHistory();
     const {user,isFetching,error,dispatch} = useContext(AuthContext);
-
     return(
         <div className="login"> 
             <Row className="loginWrapper">
@@ -94,13 +95,41 @@ export default function Login({setIsLoggedIn}){
                                 .min(8, 'Password is too short - should be 8 chars minimum.')
                                 .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.')
                             })}
-                            onSubmit={(values, { setSubmitting }) => {
-                            if(values){
-                                sessionStorage.setItem('user', values.username);
-                                setIsLoggedIn(true)
+                            onSubmit={(values, { setSubmitting,resetForm }) => {
+                            loginCall(values,dispatch);
+                            setTimeout(()=>{
+                            let name =sessionStorage.getItem('name')?sessionStorage.getItem('user'):null;
+                            console.log(name)
+                            if(name){
+                              if(values){
+                                  // sessionStorage.setItem('user', values.username);
+                                  setIsLoggedIn(true)
+                              }
+                              toast.success('LoggedIn successfully', {
+                                position: "top-right",
+                                autoClose: 1500,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme:"colored"
+                            });
+                              history.push('/')
                             }
-                            loginCall(values,dispatch)
-                            history.push('/')
+                            else{
+                              toast.error('Incorrect password/ username/ email', {
+                                position: "top-right",
+                                autoClose: 2000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme:"colored"
+                            });
+                            resetForm();
+                            }},2000)
                             }}
                         >
                             <Form>
@@ -142,6 +171,15 @@ export default function Login({setIsLoggedIn}){
                     </div>
                 </Col>
             </Row>
+            <ToastContainer position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover/>
         </div>
     )
 }

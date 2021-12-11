@@ -99,7 +99,7 @@ router.patch('/:id/like',async (req,res) => {
             return res.status(404).json("Post not found");
         }
         else{
-            console.log(req.body.userId)
+            // console.log(req.body.userId) username
             if(!post.likes.includes(req.body.userId)){
             await post.updateOne({$push:{likes:req.body.userId}});
             res.status(200).json("You have liked the post")
@@ -122,7 +122,7 @@ router.patch('/:id/heart',async (req,res) => {
             return res.status(404).json("Post not found");
         }
         else{
-            if(!post.likes.includes(req.body.userId)){
+            if(!post.heart.includes(req.body.userId)){
             await post.updateOne({$push:{heart:req.body.userId}});
             res.status(200).json("You have liked the post")
             }
