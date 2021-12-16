@@ -53,6 +53,7 @@ export default function Feed({username,id,location,User}){
         fetchPosts()
     },[uname])
     const onDelete  = async (val,id)=>{
+        try{
         await axios.delete(url +`/posts/${val}/${id}`)
         toast.error('Data successfully deleted', {
             position: "top-right",
@@ -67,6 +68,19 @@ export default function Feed({username,id,location,User}){
         setTimeout(()=>{
             window.location.reload();
         },3000)
+        }
+        catch(err){
+            toast.warning('You can only delete your post.', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme:"colored"
+            });
+        }
     }
     return(
         <div className="feed">
