@@ -95,8 +95,8 @@ export default function Login({setIsLoggedIn}){
                                 .min(8, 'Password is too short - should be 8 chars minimum.')
                                 .matches(/[a-zA-Z]/, 'Password can only contain alphanumeric characters.')
                             })}
-                            onSubmit={(values, { setSubmitting,resetForm }) => {
-                            loginCall(values,dispatch);
+                            onSubmit={async(values, { setSubmitting,resetForm }) => {
+                            await loginCall(values,dispatch);
                             setTimeout(()=>{
                             let name =sessionStorage.getItem('name')?sessionStorage.getItem('user'):null;
                             console.log(name)
@@ -129,7 +129,7 @@ export default function Login({setIsLoggedIn}){
                                 theme:"colored"
                             });
                             resetForm();
-                            }},2000)
+                            }},2500)
                             }}
                         >
                             <Form>
