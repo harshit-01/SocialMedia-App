@@ -118,16 +118,17 @@ export default function SwipeableTemporaryDrawer() {
               backgroundColor: 'info.light',
             },
           }} onClick = {()=>{
-            toast.info('This service is only available for premium users', {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme:"colored"
-              });
+            window.open("https://connect-via-tieup.netlify.app/");
+            // toast.info('This service is only available for premium users', {
+            //   position: "top-right",
+            //   autoClose: 3000,
+            //   hideProgressBar: false,
+            //   closeOnClick: true,
+            //   pauseOnHover: true,
+            //   draggable: true,
+            //   progress: undefined,
+            //   theme:"colored"
+            //   });
         }}>
             <ListItemIcon>
                 <VideoCallIcon />

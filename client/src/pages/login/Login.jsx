@@ -129,7 +129,7 @@ export default function Login({setIsLoggedIn}){
                                 theme:"colored"
                             });
                             resetForm();
-                            }},2500)
+                            }},1500)
                             }}
                         >
                             <Form>
