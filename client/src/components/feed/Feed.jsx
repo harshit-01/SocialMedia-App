@@ -31,25 +31,24 @@ export default function Feed({username,id,location,User}){
         // reader.readAsDataURL(blob);
         reader.readAsBinaryString()
     });
-    
-    useEffect(()=>{
-        const fetchPosts = async()=>{
-            const res = location == "profile" ? await axios.get(url +`/posts/profile/${uname}`):await axios.get(url +`/posts/timeline/${uname}`)
-            if(res.data.length>0){
-                const arr = res.data.sort(function(a,b){
-                    const x= new Date(a.createdAt);
-                    const y = new Date(b.createdAt);
-                    return y-x;
-                })
-               // console.log(arr)
-                setDataPost(arr);
-            }
-            else{
-            console.log(res)
-            }
-            // console.log(dataPost)
-            return res;
+    const fetchPosts = async()=>{
+        const res = location == "profile" ? await axios.get(url +`/posts/profile/${uname}`):await axios.get(url +`/posts/timeline/${uname}`)
+        if(res.data.length>0){
+            const arr = res.data.sort(function(a,b){
+                const x= new Date(a.createdAt);
+                const y = new Date(b.createdAt);
+                return y-x;
+            })
+           // console.log(arr)
+            setDataPost(arr);
         }
+        else{
+        console.log(res)
+        }
+        // console.log(dataPost)
+        return res;
+    }
+    useEffect(()=>{
         fetchPosts()
     },[uname])
     const onDelete  = async (val,id)=>{
@@ -65,9 +64,7 @@ export default function Feed({username,id,location,User}){
             progress: undefined,
             theme:"colored"
         });
-        setTimeout(()=>{
-            window.location.reload();
-        },3000)
+        fetchPosts();
         }
         catch(err){
             toast.warning('You can only delete your post.', {
@@ -95,7 +92,7 @@ export default function Feed({username,id,location,User}){
                 {dataPost.length>0 ? dataPost.map((d,index)=>{
                     // debugger;
                     return(
-                    <PostContent  val={d} onDelete={onDelete}/>
+                    <PostContent  val={d} onDelete={onDelete} setDataPost={setDataPost} location={location}/>
                     )
                 }):<>
                     {/* <div className="ms-4 mb-3">No post yet.</div> */}
@@ -112,7 +109,7 @@ export default function Feed({username,id,location,User}){
                     }}><ArrowUpwardIcon sx={{ fontSize: 25 }}/>
                     </Button>
                 </h4>
-                <Post user={User}/>
+                <Post user={User} setDataPost={setDataPost}/>
             </div>
             <ToastContainer position="top-right"
                 autoClose={5000}

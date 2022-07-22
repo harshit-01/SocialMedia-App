@@ -17,7 +17,7 @@ import FileBase from 'react-file-base64';
 
 
 
-export default function Post({user}){
+export default function Post({user,setDataPost}){
     // const {user} = React.useContext(AuthContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const desc = React.useRef();
@@ -78,17 +78,45 @@ export default function Post({user}){
         //     }
         // }
         try{
-            await axios.post(url+'/posts',newPost)
-            toast.info('Post successfully created', {
+            toast.warning('Sending post to the server. Please wait.', {
                 position: "top-right",
-                autoClose: 2000,
+                autoClose: 1000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
                 theme:"colored"
-                });
+            });
+            await axios.post(url+'/posts',newPost)
+            toast.info('Post successfully created', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme:"colored"
+            });
+            const uname = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
+            const res = await axios.get(url +`/posts/timeline/${uname}`);
+            console.log(res);
+            if(res.data.length>0){
+                const arr = res.data.sort(function(a,b){
+                    const x= new Date(a.createdAt);
+                    const y = new Date(b.createdAt);
+                    return y-x;
+                })
+               // console.log(arr)
+                setDataPost(arr);
+            }
+            else{
+            console.log(res)
+            }
+            setIsDisabled(false);
+            setText("")
+            window.scrollTo(0,0);
         }
         catch(err){
             console.log(err)
@@ -101,12 +129,12 @@ export default function Post({user}){
                 draggable: true,
                 progress: undefined,
                 theme:"colored"
-                });
+            });
         }
 
-        setTimeout(()=>{
-        window.location.reload();
-        },3000)
+        // setTimeout(()=>{
+        // window.location.reload();
+        // },3000)
     }
     const [isDisabled,setIsDisabled] = React.useState(false);
     return(

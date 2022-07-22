@@ -190,7 +190,7 @@ export default function FriendProfile({setIsLoggedIn}){
                     </h4>
                     {dataPost.length>0 ? dataPost.map((d,index)=>{
                         return(
-                        <PostContent  val={d} onDelete={onDelete}/>
+                        <PostContent  val={d} onDelete={onDelete} setDataPost={setDataPost}/>
                         )
                     }):<div className="ms-4 mb-3">No post yet.</div>}
                 </div>

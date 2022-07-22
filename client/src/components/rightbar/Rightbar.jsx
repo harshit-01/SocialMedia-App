@@ -232,9 +232,9 @@ export default function RightBar({text,profile,user,isFri}){
                     <Modal.Body>
                     <Formik
                             initialValues={{
-                            city:'',
-                            from: '',
-                            relationship:'',
+                            city:user.city ? user.city:'',
+                            from: user.from ? user.from:'',
+                            relationship:user.relationship ? user.relationship === 1? "Single":user.relationship === 2?"Married":"Divorced":'',
                             description:'',
                             }}
                             validationSchema={Yup.object({

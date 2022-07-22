@@ -65,7 +65,7 @@ function stringAvatar(name) {
   };
 }
 
-export default function PostContent({val,onDelete}){
+export default function PostContent({val,onDelete,setDataPost,location="profile"}){
     const [expanded, setExpanded] = React.useState(false);
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -109,7 +109,7 @@ export default function PostContent({val,onDelete}){
                 } 
             }
         }
-    },[val.likes,val.heart])
+    },[val,val.likes,val.heart])
     // console.log(isLiked,isHeartCounted)
     const [reaction,setReaction] = React.useState(null);
     const commentRef = React.useRef(null);
@@ -179,7 +179,7 @@ export default function PostContent({val,onDelete}){
                                 setIsLiked(!isLiked);
                             }}>
                             {isLiked?<ThumbUpIcon htmlColor="blue"/>:<ThumbUpIcon />}
-                            <span className="ms-2">{likeCount ?likeCount :0}</span>
+                            <span className="ms-2">{likeCount > 0 ? likeCount :0}</span>
                         </IconButton>
                         <IconButton aria-label="add to favorites" onClick={()=>{
                                 try{
@@ -192,7 +192,7 @@ export default function PostContent({val,onDelete}){
                                 setIsHeartCounted(!isHeartCounted)
                             }}>
                             {isHeartCounted ? <FavoriteIcon htmlColor="red"/> : <FavoriteIcon />}
-                            <span className="ms-2">{heartCount?heartCount:0}</span>
+                            <span className="ms-2">{heartCount > 0 ? heartCount:0}</span>
                         </IconButton>
                         <IconButton aria-label="add to favorites" onClick={()=>{
                             onDelete(val._id,Users._id);
@@ -215,7 +215,7 @@ export default function PostContent({val,onDelete}){
                             <p className="ms-3">Comments</p>
                             <ul>
 
-                                <li style={{listStyleType:"numeric"}}>{val.comments?val.comments:""}</li>
+                                <li style={{listStyleType:"numeric"}}>{val.comments?val.comments:"NA"}</li>
                             </ul>
                             </>
                             :
@@ -232,7 +232,21 @@ export default function PostContent({val,onDelete}){
                                     setComment(true)
                                     try{
                                         await axios.patch(url+`/posts/${val._id}/comment`,{userId:Users._id,comments:commentRef.current.value})
-                                        window.location.reload()
+                                        const uname = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
+                                        const res = location == "profile" ? await axios.get(url +`/posts/profile/${uname}`):await axios.get(url +`/posts/timeline/${uname}`)
+                                        if(res.data.length>0){
+                                            const arr = res.data.sort(function(a,b){
+                                                const x= new Date(a.createdAt);
+                                                const y = new Date(b.createdAt);
+                                                return y-x;
+                                            })
+                                           // console.log(arr)
+                                            setDataPost(arr);
+                                        }
+                                        else{
+                                        console.log(res)
+                                        }
+                                        // window.location.reload()
                                     }
                                     catch(err){
                                         console.log(err)
