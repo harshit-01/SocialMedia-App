@@ -35,7 +35,7 @@ export default function Events (props){
   };
   const [ev,setEv] =React.useState([]);
   const [Users,setUsers] = React.useState({});
-  const url = "https://tieup-project.herokuapp.com/api";
+  const url = "https://tieup.onrender.com/api";
   // const url = "http://localhost:5000/api"
   const val = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
   const updUser = async()=>{

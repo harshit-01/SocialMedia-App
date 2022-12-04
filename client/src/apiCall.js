@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const url = "https://tieup-project.herokuapp.com/api";
+const url = "https://tieup.onrender.com/api";
 // const url = "http://localhost:5000/api"
 export const loginCall = async (userCredentials,dispatch)=>{
     dispatch({type:"LOGIN_START"})

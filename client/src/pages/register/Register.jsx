@@ -57,7 +57,7 @@ const MyTextInput = ({ label, ...props }) => {
 
 export default function Register(){
     const history = useHistory()
-    const url = "https://tieup-project.herokuapp.com/api"
+    const url = "https://tieup.onrender.com/api"
     return(
         <div className="login"> 
             <Row className="loginWrapper">
@@ -108,6 +108,8 @@ export default function Register(){
                             history.push('/login')
                             }
                             catch(err){
+                              // username and email should be unique
+                              alert('Credentials should be unique');
                               console.log(err);
                             }
                             }}

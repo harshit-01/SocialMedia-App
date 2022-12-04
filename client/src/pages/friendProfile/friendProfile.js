@@ -23,7 +23,7 @@ export default function FriendProfile({setIsLoggedIn}){
     const [Users,setUsers] = React.useState({});
     const [dataPost,setDataPost] = useState([]);
     const params = useParams();
-    const url = "https://tieup-project.herokuapp.com/api";
+    const url = "https://tieup.onrender.com/api";
     const uname = params.username ?params.username:null;
     const currentUser = sessionStorage.getItem('user')?sessionStorage.getItem('user'):null;
     React.useEffect(()=>{

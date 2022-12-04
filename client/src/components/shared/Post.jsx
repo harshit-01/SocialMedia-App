@@ -23,7 +23,7 @@ export default function Post({user,setDataPost}){
     const desc = React.useRef();
     const [file,setFile] = React.useState(null);
     const [text, setText] = React.useState("");
-    const url = "https://tieup-project.herokuapp.com/api";
+    const url = "https://tieup.onrender.com/api";
     let dataUrl ="";
     function handleOnEnter(text) {
       console.log("enter", text);

@@ -17,7 +17,7 @@ import SkeletonLoading from "./../../skeletonLoading"
 export default function Feed({username,id,location,User}){
     const [dataPost,setDataPost] = useState([]);
     const {user} = React.useContext(AuthContext)
-    const url = "https://tieup-project.herokuapp.com/api";
+    const url = "https://tieup.onrender.com/api";
     // const url = "http://localhost:5000/api"
     const moveToAddPost = useRef(null);
     const moveToTop = useRef(null);
